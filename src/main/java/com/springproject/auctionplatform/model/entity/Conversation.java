@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -28,6 +27,7 @@ public class Conversation {
             joinColumns = @JoinColumn(name = "conversation_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+
     private Set<User> participants = new HashSet<>();
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)

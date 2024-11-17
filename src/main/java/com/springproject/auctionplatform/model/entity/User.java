@@ -11,7 +11,6 @@ import lombok.Setter;
 import java.util.*;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -55,4 +54,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "conversation_id")
     )
     private Set<Conversation> conversations = new HashSet<>();
+
+    @ManyToMany
+    private Set<Auction> watchlist = new HashSet<>();
+
+
 }
