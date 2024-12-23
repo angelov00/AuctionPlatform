@@ -5,7 +5,6 @@ import com.springproject.auctionplatform.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
@@ -61,5 +60,13 @@ public class User {
     @ManyToMany
     private Set<Auction> watchlist = new HashSet<>();
 
-
+    // TODO change this to Lombok constructor?
+    public User(String username, String password, String firstName, String lastName, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+    }
 }

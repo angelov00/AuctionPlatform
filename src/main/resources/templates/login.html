@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+</head>
+<body>
+    <div>
+        <h2>Login</h2>
+        <form method="POST" th:object="${loginDTO}">
+            <div>
+                <div>
+                    <label for="username">Username</label>
+                    <input th:field="*{username}" id="username" type="text"
+                           placeholder="Username" />
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input th:field="*{password}" id="password" type="password"
+                           placeholder="Password"/>
+                </div>
+                <div>
+                    <!--/*@thymesVar id="error" type="String"*/-->
+                    <p th:if="${error}" th:text="${error}">
+                        Invalid username or password.
+                    </p>
+                </div>
+            </div>
+
+
+            <div>
+                <input type="submit" value="Login"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
