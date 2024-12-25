@@ -3,6 +3,7 @@ package com.springproject.auctionplatform.model.DTO;
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,24 +13,28 @@ import java.util.List;
 @Data
 public class AuctionAddDTO {
 
-    @NotBlank
+    @NotBlank(message = "Title cannot be blank!")
     @Size(min = 5, max = 100)
     private String title;
 
-    @FutureOrPresent
-    @NotNull
+    @FutureOrPresent(message = "Start time must be in the future or present!")
+    @NotNull(message = "Start time is required!")
+    private LocalDateTime startTime;
+
+    @Future(message = "End time must be in the future!")
+    @NotNull(message = "End time is required!")
     private LocalDateTime endTime;
 
-    @NotBlank
+    @NotBlank(message = "Enter a description!")
     @Size(min = 10, max = 1000)
     private String description;
 
-    @NotNull
+    @NotNull(message = "Please select a category")
     private AuctionCategory category;
 
     @NotNull
-    @Size(min = 1)
-    private List<@NotNull @Size(max = 255) String> imageURLs;
+    @Size(min = 1, message = "Please upload at least one image!")
+    private List<MultipartFile> images;
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)

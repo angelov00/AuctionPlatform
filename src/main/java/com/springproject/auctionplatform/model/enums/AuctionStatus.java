@@ -9,6 +9,7 @@ public enum AuctionStatus {
     COMPLETED("Completed"),
     CANCELLED("Cancelled");
 
+
     private final String description;
 
     AuctionStatus(String description) {
