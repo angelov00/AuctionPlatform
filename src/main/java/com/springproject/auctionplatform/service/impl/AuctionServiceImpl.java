@@ -7,6 +7,7 @@ import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.repository.AuctionRepository;
 import com.springproject.auctionplatform.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.slf4j.Logger;
@@ -39,7 +40,6 @@ public class AuctionServiceImpl {
 
         List<String> imageUrls = uploadImages(auctionAddDTO.getImages());
 
-        // Създаване на нов аукцион
         Auction auction = new Auction();
         auction.setTitle(auctionAddDTO.getTitle());
         auction.setStartTime(auctionAddDTO.getStartTime());
@@ -63,26 +63,21 @@ public class AuctionServiceImpl {
     }
 
 
-    // Метод за планиране на стартиране на аукцион
     private void scheduleAuctionStart(Auction auction) {
         LocalDateTime startTime = auction.getStartTime();
         LocalDateTime now = LocalDateTime.now();
 
-        // Ако startTime е в бъдеще
         if (startTime.isAfter(now)) {
-            long delay = Duration.between(now, startTime).toMillis(); // Изчисляваме колко милисекунди остават
+            long delay = Duration.between(now, startTime).toMillis();
 
-            // Планираме задачата да се изпълни в точния момент
             scheduler.schedule(() -> {
                 activateAuction(auction);
             }, delay, TimeUnit.MILLISECONDS);
         } else {
-            // Ако startTime вече е настъпил, активираме аукциона веднага
             activateAuction(auction);
         }
     }
 
-    // Активиране на аукциона, когато настъпи startTime
     private void activateAuction(Auction auction) {
         auction.setStatus(AuctionStatus.ONGOING);  // Променяме статуса на активен
         auctionRepository.save(auction);  // Записваме аукциона в базата
@@ -100,6 +95,29 @@ public class AuctionServiceImpl {
                     }
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Scheduled(fixedRate = 60000) // Изпълнява се всяка минута
+    public void updateAuctionStatuses() {
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Auction> upcomingAuctions = auctionRepository.findByStatus(AuctionStatus.UPCOMING);
+        for (Auction auction : upcomingAuctions) {
+            if (auction.getStartTime().isBefore(now) || auction.getStartTime().isEqual(now)) {
+                auction.setStatus(AuctionStatus.ONGOING);
+                auctionRepository.save(auction);
+                System.out.println("Auction with id " + auction.getId() + " is now active.");
+            }
+        }
+
+        List<Auction> ongoingAuctions = auctionRepository.findByStatus(AuctionStatus.ONGOING);
+        for (Auction auction : ongoingAuctions) {
+            if (auction.getEndTime().isBefore(now) || auction.getEndTime().isEqual(now)) {
+                auction.setStatus(AuctionStatus.COMPLETED);
+                auctionRepository.save(auction);
+                System.out.println("Auction with id " + auction.getId() + " has ended.");
+            }
+        }
     }
 
 

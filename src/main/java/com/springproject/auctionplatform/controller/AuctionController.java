@@ -3,6 +3,7 @@ package com.springproject.auctionplatform.controller;
 import com.springproject.auctionplatform.model.DTO.AuctionAddDTO;
 import com.springproject.auctionplatform.model.entity.Auction;
 import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.service.impl.AuctionServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AuctionController {
 
     @GetMapping("/create")
     public String createAuction(Model model) {
+        model.addAttribute("auctionAddDTO", new AuctionAddDTO());
+        model.addAttribute("categories", AuctionCategory.values());
         return "add-auction";
     }
 
