@@ -1,6 +1,7 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.service.AuctionService;
+import com.springproject.auctionplatform.service.impl.AuctionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auctions")
 public class AuctionController {
 
-    private final AuctionService auctionService;
+    private final AuctionServiceImpl auctionService;
 
-    @Autowired
-    public AuctionController(AuctionService auctionService) {
+    public AuctionController(AuctionServiceImpl auctionService) {
         this.auctionService = auctionService;
     }
 }

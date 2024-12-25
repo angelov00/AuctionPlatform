@@ -39,6 +39,9 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = true)
+    private String avatarURL;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
