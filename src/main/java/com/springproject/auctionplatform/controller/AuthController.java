@@ -68,13 +68,11 @@ public class AuthController {
                         RedirectAttributes redirectAttributes, HttpSession session) {
         // TODO what happens if an error is thrown here(is redirect login called)?
         User user = userService.validateLogin(loginDTO);
-        System.out.println(user);
         if (user == null) {
             redirectAttributes.addFlashAttribute("error", "Invalid username or password");
         }
 
         if (bindingResult.hasErrors() || user == null) {
-            System.out.println(bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "loginDTO", bindingResult);
             // TODO add redirectURL?
@@ -83,8 +81,7 @@ public class AuthController {
             return "redirect:login";
         }
 
-        session.setAttribute("user", user);
-        System.out.println("Here");
+        session.setAttribute("username", user.getUsername());
         return "redirect:/home";
     }
 
