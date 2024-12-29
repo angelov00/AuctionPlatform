@@ -3,7 +3,6 @@ package com.springproject.auctionplatform.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -22,11 +21,11 @@ public class Message {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private boolean isRead;
 
     @Column(nullable = false)
-    private LocalDateTime time;
+    private LocalDateTime time = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
@@ -35,4 +34,9 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false)
     private Conversation conversation;
+
+    public Message(String content, User sender) {
+        this.content = content;
+        this.sender = sender;
+    }
 }
