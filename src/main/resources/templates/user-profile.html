@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+<div id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div>
+        <strong>Username: </strong>
+        <span th:text="${user.getUsername()}">John123</span>
+    </div>
+    <div>
+        <strong>Name: </strong>
+        <span th:text="|${user.getFirstName()} ${user.getLastName()}|">John Doe</span>
+    </div>
+    <div>
+        <strong>Email: </strong>
+        <span th:text="${user.getEmail()}">john@gmail.com</span>
+    </div>
+    <div>
+        <strong>Phone: </strong>
+        <span th:text="${user.getPhone()}">123 456 7890</span>
+    </div>
+</div>
+</body>
+</html>
