@@ -51,7 +51,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "user_conversations",
+            name = "conversation_participants",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "conversation_id")
     )
