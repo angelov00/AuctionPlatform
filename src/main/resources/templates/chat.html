@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+</head>
+<body>
+<div>
+  <div>
+    <div>
+      <div>
+        <div>
+          <h3>Chat</h3>
+        </div>
+        <div>
+          <div id="chat-messages" style="height: 300px; overflow-y: auto;">
+            <div th:each="message : ${messages}">
+              <strong th:text="${message.getSender().getUsername()} + ': '">John Doe: </strong>
+              <span th:text="${message.getContent()}">Message</span>
+            </div>
+          </div>
+          <div>
+            <input type="text" id="message" placeholder="Type a message...">
+            <input type="hidden" id="username" th:value="${senderUsername}">
+            <input type="hidden" id="conversationId" th:value="${conversationId}">
+            <button onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+  let stompClient = null;
+  const senderUsername = document.getElementById('username').value;
+  const conversationId = document.getElementById('conversationId').value;
+
+  function connect() {
+    const socket = new SockJS('/chat-websocket');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, onConnect);
+  }
+
+  function onConnect() {
+    stompClient.subscribe(`/user/${senderUsername}-${conversationId}/queue/messages`, function(message) {
+      showMessage(JSON.parse(message.body));
+    });
+  }
+
+  function sendMessage() {
+    const messageInput = document.getElementById('message');
+    const messageContent = messageInput.value.trim();
+
+    if (messageContent && stompClient) {
+      const chatMessage = {
+        content: messageContent,
+        sender: senderUsername,
+        conversationId: conversationId
+      };
+
+      stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+      messageInput.value = '';
+
+      showMessage(chatMessage);
+    }
+  }
+
+  function showMessage(message) {
+    const messageArea = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+
+    messageElement.innerHTML = `<div>
+                    <strong>${message.sender}</strong>: ${message.content}
+                </div>`;
+
+    messageArea.appendChild(messageElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
+  }
+
+  // Connect when page loads
+  connect();
+
+  // Handle enter key
+  document.getElementById('message').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Handle window close
+  window.onbeforeunload = function() {
+    if (stompClient) {
+      stompClient.disconnect();
+    }
+  }
+</script>
+</body>
+</html>
