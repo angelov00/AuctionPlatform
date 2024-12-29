@@ -2,6 +2,7 @@ package com.springproject.auctionplatform.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,10 +15,12 @@ import java.util.*;
 @Setter
 @Entity
 @Table(name = "conversations")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Conversation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private LocalDateTime creationDate = LocalDateTime.now();
