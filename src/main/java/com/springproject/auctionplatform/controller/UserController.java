@@ -1,9 +1,10 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.security.CustomUserDetails;
 import com.springproject.auctionplatform.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,14 +22,15 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public String getUserProfile(@PathVariable("username") String username, Model model, HttpSession session) {
-        if (session.getAttribute("username") == null ||
-            !session.getAttribute("username").equals(username)) {
-
-            return "redirect:/auth/login";
-        }
-
+    public String getUserProfile(@PathVariable("username") String username, Model model) {
         User user = userService.getUserByUsername(username);
+        model.addAttribute("user", user);
+
+        return "user-profile";
+    }
+
+    @GetMapping("/profile")
+    public String getAuthenticatedUserProfile(Model model, @AuthenticationPrincipal CustomUserDetails user) {
         model.addAttribute("user", user);
 
         return "user-profile";
