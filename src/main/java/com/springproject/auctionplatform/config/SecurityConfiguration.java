@@ -59,9 +59,13 @@ public class SecurityConfiguration {
 //
 //        return new InMemoryUserDetailsManager(user);
 //    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//}
+
+    @Bean
+    public AuthenticationProvider userDetailsManager(DataSource dataSource) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+
+        return provider;
+    }
+}
