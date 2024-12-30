@@ -8,7 +8,7 @@ import com.springproject.auctionplatform.service.UserService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +16,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -38,7 +41,8 @@ public class UserServiceImpl implements UserService {
         userRepository.findByUsername(registerDTO.getUsername()).ifPresent(u -> { throw new EntityExistsException(
                 String.format("User with username %s already exists", registerDTO.getUsername()));});
 
-        User user = new User(registerDTO.getUsername(), registerDTO.getPassword(), registerDTO.getFirstName(),
+        String encodedPassword = passwordEncoder.encode(registerDTO.getPassword());
+        User user = new User(registerDTO.getUsername(), encodedPassword, registerDTO.getFirstName(),
             registerDTO.getLastName(), registerDTO.getEmail(), registerDTO.getPhone());
 
         return userRepository.save(user);
