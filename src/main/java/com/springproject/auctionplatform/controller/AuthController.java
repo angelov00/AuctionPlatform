@@ -1,10 +1,7 @@
 package com.springproject.auctionplatform.controller;
 
-import com.springproject.auctionplatform.model.DTO.UserLoginDTO;
 import com.springproject.auctionplatform.model.DTO.UserRegisterDTO;
-import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,11 +26,7 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String getLoginForm(Model model) {
-        if (!model.containsAttribute("loginDTO")) {
-            model.addAttribute("loginDTO", new UserLoginDTO());
-        }
-
+    public String getLoginForm() {
         return "login";
     }
 
@@ -60,35 +53,5 @@ public class AuthController {
         userService.createUser(registerDTO);
 
         return "redirect:login";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("loginDTO") UserLoginDTO loginDTO,
-                        BindingResult bindingResult,
-                        RedirectAttributes redirectAttributes, HttpSession session) {
-        // TODO what happens if an error is thrown here(is redirect login called)?
-        User user = userService.validateLogin(loginDTO);
-        if (user == null) {
-            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
-        }
-
-        if (bindingResult.hasErrors() || user == null) {
-            redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
-            redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "loginDTO", bindingResult);
-            // TODO add redirectURL?
-            // redirectAttributes.addAttribute("redirectURL", redirectURL);
-
-            return "redirect:login";
-        }
-
-        session.setAttribute("username", user.getUsername());
-        return "redirect:/home";
-    }
-
-    @RequestMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-
-        return "redirect:/home";
     }
 }

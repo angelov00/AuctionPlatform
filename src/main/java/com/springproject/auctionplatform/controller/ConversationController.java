@@ -20,8 +20,6 @@ public class ConversationController {
 
     @GetMapping("/{username}")
     public String showConversation(@PathVariable("username") String username, Model model) {
-        // TODO validate user session
-
         model.addAttribute("participantsByConversationId",
             conversationService.getParticipantsByConversationId(username));
 

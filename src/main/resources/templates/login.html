@@ -7,26 +7,24 @@
 <body>
     <div>
         <h2>Login</h2>
-        <form method="POST" th:object="${loginDTO}">
+        <form th:action="@{/auth/login}" method="post">
             <div>
                 <div>
                     <label for="username">Username</label>
-                    <input th:field="*{username}" id="username" type="text"
+                    <input id="username" name="username" type="text"
                            placeholder="Username" />
                 </div>
                 <div>
                     <label for="password">Password</label>
-                    <input th:field="*{password}" id="password" type="password"
+                    <input id="password" name="password" type="password"
                            placeholder="Password"/>
                 </div>
-                <div>
-                    <!--/*@thymesVar id="error" type="String"*/-->
-                    <p th:if="${error}" th:text="${error}">
+                <div th:if="${param.error}">
+                    <p>
                         Invalid username or password.
                     </p>
                 </div>
             </div>
-
 
             <div>
                 <input type="submit" value="Login"/>
