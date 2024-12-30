@@ -1,0 +1,17 @@
+<div th:fragment="menu" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div sec:authorize="isAuthenticated()" style="display: flex; gap: 10px;">
+        <form th:action="@{/auth/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+
+        <form th:action="@{/users/profile}" method="get" >
+            <button type="submit">User Profile</button>
+        </form>
+    </div>
+
+    <div sec:authorize="isAnonymous()">
+        <form th:action="@{/auth/login}" method="get">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
