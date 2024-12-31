@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -33,6 +34,6 @@ public class UserRegisterDTO {
     private String phone;
 
     @NotNull(message = "Preferred categories are required")
-    private Set<AuctionCategory> preferredCategories;
+    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 }
 

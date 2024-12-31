@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Form</title>
+</head>
+<body>
+    <div>
+        <h2>Register</h2>
+        <form th:action="@{/auth/register}" method="POST" th:object="${registerDTO}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div>
+                <div>
+                    <label for="username">Username</label>
+                    <input th:field="*{username}" id="username" type="text" min="3" max="50"
+                           placeholder="Username" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                        Username is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input th:field="*{password}" id="password" type="password" min="6"
+                           placeholder="Password" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                        Password is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="firstName">First Name</label>
+                    <input th:field="*{firstName}" id="firstName" type="text"
+                           placeholder="First name" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                        First Name is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="lastName">Last Name</label>
+                    <input th:field="*{lastName}" id="lastName" type="text"
+                           placeholder="Last name" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                        Last Name is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input th:field="*{email}" id="email" type="text"
+                           placeholder="Email" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                        Email is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="phone">Phone</label>
+                    <input th:field="*{phone}" id="phone" type="text"
+                           placeholder="Phone" /> <!-- th:errorclass="field-error" -->
+                    <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+                        Phone is required.
+                    </p>
+                </div>
+                <div>
+                    <label for="preferredCategories">Preferred Categories</label>
+                    <select th:field="*{preferredCategories}" id="preferredCategories" multiple> <!-- th:errorclass="field-error" -->
+                        <option th:each="category : ${T(com.springproject.auctionplatform.model.enums.AuctionCategory).values()}"
+                                th:value="${category}" th:text="${category}"
+                                th:selected="${#sets.contains(registerDTO.preferredCategories, category)}">
+                            Preferred category
+                        </option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('preferredCategories')}" th:errors="*{preferredCategories}">
+                        Selecting a preferred category is required.
+                    </p>
+                </div>
+                <div>
+                    <input type="submit" value="Submit"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

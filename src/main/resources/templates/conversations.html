@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversations</title>
+</head>
+<body>
+<div>
+  <h2>Conversations: </h2>
+  <!--/*@thymesVar id="getKey" type="com.springproject.auctionplatform.model.entity.Conversation"*/-->
+  <!--/*@thymesVar id="getValue" type="java.util.List"*/-->
+  <div th:each="entry: ${participantsByConversationId}" th:with="conversationId=${entry.getKey()}, participants=${entry.getValue()}">
+    <table>
+      <tr>
+        <th>Chat</th>
+        <th>Participants</th>
+<!--        <th>Messages</th>-->
+      </tr>
+      <tr>
+        <th th:text="${conversationId}">Conversation name</th>
+        <th th:text="${#strings.listJoin(participants, ',')}">Participants</th>
+<!--        <th>-->
+<!--          <form th:action="@{/messages/{senderUsername}/{conversationId}}" method="get" >-->
+<!--            <button type="submit">Messages</button>-->
+<!--          </form>-->
+<!--        </th>-->
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

@@ -5,7 +5,6 @@ import com.springproject.auctionplatform.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
@@ -39,7 +38,6 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = true)
     private String avatarURL;
 
     @Enumerated(EnumType.STRING)
@@ -52,7 +50,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "user_conversations",
+            name = "conversation_participants",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "conversation_id")
     )
@@ -61,5 +59,14 @@ public class User {
     @ManyToMany
     private Set<Auction> watchlist = new HashSet<>();
 
-
+    public User(String username, String password, String firstName, String lastName,
+                String email, String phone, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.roles = roles;
+    }
 }
