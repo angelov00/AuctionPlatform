@@ -1,4 +1,4 @@
-package com.springproject.auctionplatform.model.security;
+package com.springproject.auctionplatform.config.security;
 
 import com.springproject.auctionplatform.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;

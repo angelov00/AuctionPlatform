@@ -14,10 +14,16 @@
       <tr>
         <th>Chat</th>
         <th>Participants</th>
+<!--        <th>Messages</th>-->
       </tr>
       <tr>
         <th th:text="${conversationId}">Conversation name</th>
         <th th:text="${#strings.listJoin(participants, ',')}">Participants</th>
+<!--        <th>-->
+<!--          <form th:action="@{/messages/{senderUsername}/{conversationId}}" method="get" >-->
+<!--            <button type="submit">Messages</button>-->
+<!--          </form>-->
+<!--        </th>-->
       </tr>
     </table>
   </div>

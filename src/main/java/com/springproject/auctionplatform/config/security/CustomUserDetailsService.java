@@ -1,7 +1,6 @@
-package com.springproject.auctionplatform.service.impl;
+package com.springproject.auctionplatform.config.security;
 
 import com.springproject.auctionplatform.model.entity.User;
-import com.springproject.auctionplatform.model.security.CustomUserDetails;
 import com.springproject.auctionplatform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            .orElseThrow(() -> new UsernameNotFoundException("User with given username not found"));
 
         return new CustomUserDetails(user);
     }

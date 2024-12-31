@@ -1,11 +1,12 @@
 package com.springproject.auctionplatform.controller;
 
+import com.springproject.auctionplatform.config.security.CustomUserDetails;
 import com.springproject.auctionplatform.service.ConversationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -18,10 +19,10 @@ public class ConversationController {
         this.conversationService = conversationService;
     }
 
-    @GetMapping("/{username}")
-    public String showConversation(@PathVariable("username") String username, Model model) {
+    @GetMapping
+    public String showConversation(@AuthenticationPrincipal CustomUserDetails user, Model model) {
         model.addAttribute("participantsByConversationId",
-            conversationService.getParticipantsByConversationId(username));
+            conversationService.getParticipantsByConversationId(user.getUsername()));
 
         return "conversations";
     }

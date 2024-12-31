@@ -1,7 +1,7 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.model.entity.User;
-import com.springproject.auctionplatform.model.security.CustomUserDetails;
+import com.springproject.auctionplatform.config.security.CustomUserDetails;
 import com.springproject.auctionplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
