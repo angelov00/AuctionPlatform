@@ -4,8 +4,12 @@
             <button type="submit">Logout</button>
         </form>
 
-        <form th:action="@{/users/profile}" method="get" >
-            <button type="submit">User Profile</button>
+        <form th:action="@{/users}" method="get" >
+            <button type="submit">Profile</button>
+        </form>
+
+        <form th:action="@{/conversations}" method="get" >
+            <button type="submit">Conversations</button>
         </form>
     </div>
 
