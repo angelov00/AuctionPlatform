@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -29,7 +29,7 @@ public class UserController {
         return "user-profile";
     }
 
-    @GetMapping("/profile")
+    @GetMapping
     public String getAuthenticatedUserProfile(Model model, @AuthenticationPrincipal CustomUserDetails user) {
         model.addAttribute("user", user);
 

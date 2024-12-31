@@ -15,8 +15,8 @@ import java.util.List;
 
 @Controller
 public class ChatController {
-    private SimpMessagingTemplate messagingTemplate;
-    private ConversationService conversationService;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final ConversationService conversationService;
 
     @Autowired
     public ChatController(SimpMessagingTemplate messagingTemplate, ConversationService conversationService) {
@@ -37,7 +37,8 @@ public class ChatController {
 
     @GetMapping("/messages/{senderUsername}/{conversationId}")
     public String getChatMessages(@PathVariable("senderUsername") String senderUsername,
-                                  @PathVariable("conversationId") long conversationId, Model model) {
+                                  @PathVariable("conversationId") long conversationId,
+                                  Model model) {
         List<Message> messages = conversationService.getAllMessagesForConversation(conversationId);
 
         conversationService.validateUser(senderUsername, conversationId);

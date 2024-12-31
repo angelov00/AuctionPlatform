@@ -38,7 +38,6 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = true)
     private String avatarURL;
 
     @Enumerated(EnumType.STRING)
@@ -60,13 +59,14 @@ public class User {
     @ManyToMany
     private Set<Auction> watchlist = new HashSet<>();
 
-    // TODO change this to Lombok constructor?
-    public User(String username, String password, String firstName, String lastName, String email, String phone) {
+    public User(String username, String password, String firstName, String lastName,
+                String email, String phone, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.roles = roles;
     }
 }
