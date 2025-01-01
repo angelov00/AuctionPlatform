@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bid History</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<h1>Bid History</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Auction</th>
+        <th>Bid Amount</th>
+        <th>Bid Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bid : ${bids}">
+        <td><a th:href="@{/auction/details/{id}(id=${bid.auction.id})}" th:text="${bid.auction.title}"></a></td>
+        <td th:text="${bid.amount}"></td>
+        <td th:text="${bid.time}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

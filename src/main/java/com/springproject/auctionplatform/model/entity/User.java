@@ -56,7 +56,7 @@ public class User {
     )
     private Set<Conversation> conversations = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Auction> watchlist = new HashSet<>();
 
     public User(String username, String password, String firstName, String lastName,
@@ -68,5 +68,18 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

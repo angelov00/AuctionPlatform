@@ -3,11 +3,8 @@ package com.springproject.auctionplatform.model.entity;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
 import com.springproject.auctionplatform.model.enums.PaymentStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -18,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "payments")
-public class Payment {
+public class Promotion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +24,8 @@ public class Payment {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    @Column(nullable = false, name = "payment_date")
-    private LocalDateTime paymentDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "payment_status")
-    private PaymentStatus status;
+    @Column(nullable = false, name = "promotion_date")
+    private LocalDateTime promotionDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "payment_method")

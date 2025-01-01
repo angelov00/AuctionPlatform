@@ -7,7 +7,8 @@ public enum AuctionStatus {
     UPCOMING("Upcoming"),
     ONGOING("Ongoing"),
     COMPLETED("Completed"),
-    CANCELLED("Cancelled");
+    CANCELLED("Cancelled"),
+    WAITING_FOR_FINALIZATION("Waiting for finalization");
 
 
     private final String description;

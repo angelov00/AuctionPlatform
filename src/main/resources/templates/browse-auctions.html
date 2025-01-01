@@ -1,95 +1,161 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Browse Auctions</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
-<h1>Browse Auctions</h1>
+<div class="container mt-5">
+    <h2>Browse Auctions</h2>
 
-<!-- Filter Form -->
-<form th:action="@{/auction}" method="get">
-    <label for="category">Category:</label>
-    <select id="category" name="category">
-        <option value="">All</option>
-        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
-    </select>
+    <!-- Auction Filter Form -->
+    <form th:action="@{/auction}" method="get" th:object="${auctionFilterDTO}">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="auctionCategory">Category</label>
+                <select id="auctionCategory" th:field="*{auctionCategory}" class="form-control">
+                    <option value="" selected>Select a category</option>
+                    <option th:each="category : ${T(com.springproject.auctionplatform.model.enums.AuctionCategory).values()}"
+                            th:value="${category}" th:text="${category}"></option>
+                </select>
+            </div>
 
-    <label for="minPrice">Min Price:</label>
-    <input type="number" id="minPrice" name="minPrice" step="0.01">
+            <div class="col-md-3">
+                <label for="currentPriceGreaterThan">Current price greater than</label>
+                <input type="number" id="currentPriceGreaterThan" th:field="*{currentPriceGreaterThan}" class="form-control" min="0" step="0.01" />
+            </div>
 
-    <label for="maxPrice">Max Price:</label>
-    <input type="number" id="maxPrice" name="maxPrice" step="0.01">
+            <div class="col-md-3">
+                <label for="currentPriceLessThan">Current price less than</label>
+                <input type="number" id="currentPriceLessThan" th:field="*{currentPriceLessThan}" class="form-control" min="0" step="0.01" />
+            </div>
 
-    <button type="submit">Filter</button>
-</form>
+            <div class="col-md-3">
+                <label for="titleSearch">Search by Title</label>
+                <input type="text" id="titleSearch" th:field="*{titleSearch}" class="form-control" />
+            </div>
+        </div>
 
-<!-- Auctions List -->
-<div>
-    <h2>Auction Results</h2>
-    <div th:if="${auctions.isEmpty()}">No auctions found.</div>
-    <div th:if="${not auctions.isEmpty()}">
-        <table>
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Current Price</th>
-                <th>Status</th>
-                <th>End Time</th>
-                <th>Time Left</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="auction : ${auctions}">
-                <td th:text="${auction.title}"></td>
-                <td th:text="${auction.category}"></td>
-                <td th:text="${auction.currentPrice}"></td>
-                <td th:text="${auction.status}"></td>
-                <td th:text="${auction.endTime}"></td>
-                <td>
-                    <span class="time-left"
-                          th:data-end-time="${auction.endTime}"
-                          th:text="'Calculating...'">
-                    </span>
-                </td>
-                <td>
-                    <a th:href="@{/auction/details/{id}(id=${auction.id})}" class="btn btn-primary">View Details</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+
+    <h3 class="mt-5">Promoted Auctions</h3>
+    <div th:if="${promotedAuctions != null}">
+        <div class="row">
+            <div class="col-md-4" th:each="auction : ${promotedAuctions.content}">
+                <div class="card mb-4">
+                    <img th:src="@{${auction.mainPhotoURL}}" class="card-img-top" alt="Auction Image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${auction.title}"></h5>
+                        <p class="card-text" th:text="${auction.description}"></p>
+                        <p class="card-text">
+                            <small class="text-muted">End Time: <span class="end-time" th:text="${auction.endTime}"></span></small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Remaining time: <span class="remaining-time"></span>
+                            </small>
+                        </p>
+                        <p class="card-text" th:text="'Current Price: ' + ${auction.currentPrice}"></p>
+                        <a th:href="@{/auction/details/{id}(id=${auction.id})}" class="btn btn-primary">View Auction</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-5">Regular Auctions</h3>
+    <div th:if="${regularAuctions != null}">
+        <div class="row">
+            <div class="col-md-4" th:each="auction : ${regularAuctions.content}">
+                <div class="card mb-4">
+                    <img th:src="@{${auction.mainPhotoURL}}" class="card-img-top" alt="Auction Image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${auction.title}"></h5>
+                        <p class="card-text" th:text="${auction.description}"></p>
+                        <p class="card-text">
+                            <small class="text-muted">End Time: <span class="end-time" th:text="${auction.endTime}"></span></small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Remaining time: <span class="remaining-time"></span>
+                            </small>
+                        </p>
+                        <p class="card-text" th:text="'Current Price: ' + ${auction.currentPrice}"></p>
+                        <a th:href="@{/auction/details/{id}(id=${auction.id})}" class="btn btn-primary">View Auction</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" th:if="${regularAuctions.hasPrevious()}">
+                        <a class="page-link" th:href="@{/auctions(page=${regularAuctions.number - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, regularAuctions.totalPages - 1)}">
+                        <a class="page-link" th:href="@{/auctions(page=${i})}" th:text="${i + 1}"></a>
+                    </li>
+                    <li class="page-item" th:if="${regularAuctions.hasNext()}">
+                        <a class="page-link" th:href="@{/auctions(page=${regularAuctions.number + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 
-<!-- Добавяме JavaScript за динамично обновяване на оставащото време -->
+<!-- JavaScript -->
 <script>
-    function updateTimeLeft() {
-        const timeLeftElements = document.querySelectorAll('.time-left');
-        timeLeftElements.forEach(el => {
-            const endTime = new Date(el.dataset.endTime); // Крайното време от data-end-time
-            const now = new Date();
-            const timeDiff = endTime - now;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all the auctions on the page
+        const auctionCards = document.querySelectorAll('.card');
 
-            if (timeDiff <= 0) {
-                el.textContent = 'Auction Ended';
-            } else {
+        auctionCards.forEach(function(card) {
+            const endTimeText = card.querySelector('.end-time').textContent.trim();
+            const remainingTimeSpan = card.querySelector('.remaining-time');
+
+            // Convert the end time to a JavaScript Date object
+            const endTime = new Date(endTimeText);
+
+            // Function to update the remaining time
+            function updateRemainingTime() {
+                const now = new Date();
+                const timeDiff = endTime - now;
+
+                if (timeDiff <= 0) {
+                    remainingTimeSpan.textContent = "Auction ended";
+                    return;
+                }
+
                 const hours = Math.floor(timeDiff / (1000 * 60 * 60));
                 const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-                el.textContent = `${hours}h ${minutes}m ${seconds}s`;
-            }
-        });
-    }
 
-    // Обновяваме оставащото време всяка секунда
-    setInterval(updateTimeLeft, 1000);
-    updateTimeLeft(); // Първоначално извикване
+                remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            // Update the time initially
+            updateRemainingTime();
+
+            // Update the time every second
+            setInterval(updateRemainingTime, 1000);
+        });
+    });
 </script>
+
 
 </body>
 </html>

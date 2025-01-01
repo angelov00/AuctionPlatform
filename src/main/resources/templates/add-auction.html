@@ -20,18 +20,11 @@
             <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
 
-        <!-- Start Time -->
+        <!-- Duration in Days -->
         <div class="form-group">
-            <label for="startTime">Start Time</label>
-            <input type="datetime-local" class="form-control" id="startTime" th:field="*{startTime}" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}"></div>
-        </div>
-
-        <!-- End Time -->
-        <div class="form-group">
-            <label for="endTime">End Time</label>
-            <input type="datetime-local" class="form-control" id="endTime" th:field="*{endTime}" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}"></div>
+            <label for="durationDays">Duration (Days)</label>
+            <input type="number" class="form-control" id="durationDays" th:field="*{durationDays}" placeholder="Enter duration in days (1-30)" min="1" max="30" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('durationDays')}" th:errors="*{durationDays}"></div>
         </div>
 
         <!-- Description -->
@@ -72,6 +65,20 @@
             <label for="reservePrice">Reserve Price</label>
             <input type="number" class="form-control" id="reservePrice" th:field="*{reservePrice}" placeholder="Enter reserve price" step="0.01" min="0" required>
             <div class="text-danger" th:if="${#fields.hasErrors('reservePrice')}" th:errors="*{reservePrice}"></div>
+        </div>
+
+        <!-- Promote Auction -->
+        <div class="form-group">
+            <label for="promoteAuction">Would you like to promote this auction?</label>
+            <div class="form-check">
+                <input type="radio" id="promoteYes" th:field="*{promoteAuction}" value="true" class="form-check-input">
+                <label class="form-check-label" for="promoteYes">Yes</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" id="promoteNo" th:field="*{promoteAuction}" value="false" class="form-check-input">
+                <label class="form-check-label" for="promoteNo">No</label>
+            </div>
+            <div class="text-danger" th:if="${#fields.hasErrors('promoteAuction')}" th:errors="*{promoteAuction}"></div>
         </div>
 
         <!-- Submit Button -->

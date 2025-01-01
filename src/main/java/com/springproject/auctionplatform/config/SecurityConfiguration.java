@@ -20,13 +20,13 @@ public class SecurityConfiguration {
         // TODO change anyRequest() to just specific requests where user must be logged in
         http.authorizeHttpRequests(configurer ->
                 configurer
-                    .requestMatchers("/auth/register", "/home").permitAll()
+                    .requestMatchers("/auth/register", "/home", "/").permitAll()
                     .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/auth/login")
-//                .loginProcessingUrl("/auth/login")
+//              .loginProcessingUrl("/auth/login")
                 .failureUrl("/auth/login?error")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/home", true)
                 .permitAll())
             .logout(logout -> logout
                 .logoutUrl("/auth/logout")

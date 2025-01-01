@@ -60,7 +60,7 @@
                 </div>
                 <div>
                     <label for="preferredCategories">Preferred Categories</label>
-                    <select th:field="*{preferredCategories}" id="preferredCategories" multiple> <!-- th:errorclass="field-error" -->
+                    <select th:field="*{preferredCategories}" id="preferredCategories" multiple>
                         <option th:each="category : ${T(com.springproject.auctionplatform.model.enums.AuctionCategory).values()}"
                                 th:value="${category}" th:text="${category}"
                                 th:selected="${#sets.contains(registerDTO.preferredCategories, category)}">

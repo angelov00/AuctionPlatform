@@ -44,4 +44,6 @@ public class CustomUserDetails implements UserDetails {
     public String getPhone() {
         return user.getPhone();
     }
+
+    public User getUser() { return this.user; }
 }

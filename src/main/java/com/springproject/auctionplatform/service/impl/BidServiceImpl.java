@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -48,5 +49,10 @@ public class BidServiceImpl implements BidService {
         auctionRepository.save(auction);
 
         return bid;
+    }
+
+
+    public List<Bid> findBidsByUser(User user) {
+        return this.bidRepository.findByUserId(user.getId());
     }
 }

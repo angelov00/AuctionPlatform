@@ -21,6 +21,14 @@
          style="max-width: 300px; margin: 10px;">
 </div>
 
+<!-- Add to Watchlist -->
+<h2>Actions</h2>
+<div>
+    <form th:action="@{/users/watchlist/add/{auctionId}(auctionId=${auction.id})}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+    </form>
+</div>
+
 <!-- Bid Form -->
 <h2>Place a Bid</h2>
 <form th:action="@{/auction/bid}" method="post">
@@ -31,7 +39,7 @@
 </form>
 
 <!-- Bids List -->
-<h2>Current Bids</h2>
+<h2>Bid history</h2>
 <ul>
     <li th:each="bid : ${bids}">
         <span th:text="${bid.user.username}"></span> -

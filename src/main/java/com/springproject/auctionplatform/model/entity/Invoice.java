@@ -3,7 +3,6 @@ package com.springproject.auctionplatform.model.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -25,7 +24,7 @@ public class Invoice {
 
     @OneToOne
     @JoinColumn(name = "payment_id", nullable = false)  // Explicit foreign key for Payment
-    private Payment payment;
+    private Promotion payment;
 
     @Column(nullable = false)
     private BigDecimal amountExcludingTax;

@@ -1,8 +1,10 @@
 package com.springproject.auctionplatform.service.impl;
 
 import com.springproject.auctionplatform.model.DTO.UserRegisterDTO;
+import com.springproject.auctionplatform.model.entity.Auction;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.model.enums.Role;
+import com.springproject.auctionplatform.repository.AuctionRepository;
 import com.springproject.auctionplatform.repository.UserRepository;
 import com.springproject.auctionplatform.service.UserService;
 import jakarta.persistence.EntityExistsException;
@@ -19,12 +21,14 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AuctionRepository auctionRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, AuctionRepository auctionRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.auctionRepository = auctionRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -74,5 +78,27 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
 
         return existing;
+    }
+
+    public void addToWatchlist(User user, Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new IllegalArgumentException("Auction not found"));
+
+        user.getWatchlist().add(auction);
+        userRepository.save(user);
+    }
+
+    // Премахване на търг от наблюдаваните
+    public void removeFromWatchlist(User user, Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new IllegalArgumentException("Auction not found"));
+
+        user.getWatchlist().remove(auction);
+        userRepository.save(user);
+    }
+
+    // Извличане на всички наблюдавани търгове за потребителя
+    public Set<Auction> getWatchlist(User user) {
+        return user.getWatchlist();
     }
 }

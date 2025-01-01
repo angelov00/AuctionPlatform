@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Watchlist</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<div class="container mt-5">
+    <h2>Your Watchlist</h2>
+
+    <div th:if="${watchlist.isEmpty()}">
+        <p>You have no auctions in your watchlist.</p>
+    </div>
+
+    <div th:if="${!watchlist.isEmpty()}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Starting Price</th>
+                <th>End Time</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="auction : ${watchlist}">
+                <td th:text="${auction.title}"></td>
+                <td th:text="${auction.startingPrice}"></td>
+                <td th:text="${auction.endTime}"></td>
+                <td>
+                    <form th:action="@{/users/watchlist/remove/{auctionId}(auctionId=${auction.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

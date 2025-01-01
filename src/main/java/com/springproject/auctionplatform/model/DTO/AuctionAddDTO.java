@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,13 +16,9 @@ public class AuctionAddDTO {
     @Size(min = 5, max = 100)
     private String title;
 
-    @FutureOrPresent(message = "Start time must be in the future or present!")
-    @NotNull(message = "Start time is required!")
-    private LocalDateTime startTime;
-
-    @Future(message = "End time must be in the future!")
-    @NotNull(message = "End time is required!")
-    private LocalDateTime endTime;
+    @Min(value = 1)
+    @Max(value = 30)
+    private int durationDays;
 
     @NotBlank(message = "Enter a description!")
     @Size(min = 10, max = 1000)
@@ -43,6 +38,8 @@ public class AuctionAddDTO {
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal reservePrice;
+
+    private Boolean promoteAuction;
 
 }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Auctions</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<h1>My Auctions</h1>
+
+<div th:if="${myAuctions.isEmpty()}">
+    <p>You have not created any auctions yet.</p>
+</div>
+
+<div th:if="${not myAuctions.isEmpty()}">
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Current Price</th>
+            <th>Status</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="auction : ${myAuctions}">
+            <td th:text="${auction.title}"></td>
+            <td th:text="${auction.category}"></td>
+            <td th:text="${auction.currentPrice}"></td>
+            <td th:text="${auction.status}"></td>
+            <td th:text="${auction.endTime}"></td>
+            <td>
+                <a th:href="@{/auction/details/{id}(id=${auction.id})}" class="btn btn-primary">View Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
