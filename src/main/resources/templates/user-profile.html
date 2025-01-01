@@ -2,26 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User Profile</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Import Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
+<style>
+    .bg-custom {
+        background-color: #d35400 !important; /* Оранжевият цвят */
+    }
+</style>
+
 <div th:replace="~{fragments/menu :: menu}"></div>
 
-<h1 th:text="'Profile of ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
+<!-- Main container for the profile -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4" th:text="'Profile of ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
 
-<div>
-    <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
-    <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
-    <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
-    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-    <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
+    <!-- Profile details in a card -->
+    <div class="card">
+        <div class="card-header bg-custom text-white">
+            <h4 class="card-title mb-0">User Profile</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+                    <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+                    <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                    <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
+                </div>
+            </div>
+
+            <!-- Button for editing profile -->
+            <div class="mt-4 text-center">
+                <a th:href="@{/users/edit}" class="btn btn-primary btn-lg">Edit Profile</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Button for editing profile -->
-<div>
-    <a th:href="@{/users/edit}" class="btn btn-primary">Edit Profile</a>
-</div>
+<!-- Import Bootstrap JS (needed for responsive behavior and components like dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

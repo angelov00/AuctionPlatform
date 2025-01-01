@@ -50,7 +50,12 @@ public class AuctionController {
         // TODO
         // If there is no specified category - show user preferred categories
 
-        Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(page, size);
+        final int promotedSize = 3;
+
+        // TODO
+        // Add promoted auctions pages logic
+
+        Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(0, promotedSize);
         Page<AuctionPreviewDTO> pagedRegularAuctions = auctionService.getRegularAuctions(filter, page, size);
 
         model.addAttribute("promotedAuctions", pagedPromotedAuctions);

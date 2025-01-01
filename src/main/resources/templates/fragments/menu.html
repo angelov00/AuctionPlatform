@@ -1,60 +1,129 @@
 <div th:fragment="menu" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <div sec:authorize="isAuthenticated()" style="display: flex; gap: 10px;">
+    <!-- Include Bootstrap CSS for the menu fragment -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-        <form th:action="@{/home}" th:method="get">
-            <input type="submit" value="Home"></input>
-        </form>
 
-        <form th:action="@{/users}" method="get" >
-            <button type="submit">Profile</button>
-        </form>
+    <style>
+        /* CSS за градиентен фон */
+        .navbar-gradient {
+            background: linear-gradient(to right, #d35400, #f39c12); /* Преход от карамел до кафяво */
+        }
+        .nav-link:hover {
+            background-color: #e67e22; /* Променя фона при hover на бутоните */
+            color: #fff; /* Променя цвета на текста при hover */
+        }
 
-        <form th:action="@{/conversations}" method="get" >
-            <button type="submit">Conversations</button>
-        </form>
+    </style>
 
-        <form th:action="@{/auction/create}" method="get" >
-            <button type="submit">Add auction</button>
-        </form>
 
-        <form th:action="@{/auction}" method="get" >
-            <button type="submit">Browse auctions</button>
-        </form>
+    <!-- Authenticated User Menu -->
+    <div sec:authorize="isAuthenticated()">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient">
+            <div class="container-fluid">
+                <!-- Navbar Brand -->
+                <a class="navbar-brand" href="#">Auction Platform</a>
 
-        <form th:action="@{/auction/my-auctions}" method="get" >
-            <button type="submit">My Auctions</button>
-        </form>
+                <!-- Toggler for responsive navigation -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <form th:action="@{/users/watchlist}" method="get" >
-            <button type="submit">My Watchlist</button>
-        </form>
-
-        <form th:action="@{/bids/history}" method="get">
-            <button type="submit">Bid history</button>
-        </form>
-
-        <form th:action="@{/promotions}" method="get">
-            <button type="submit">Promotion history</button>
-        </form>
-
-        <form th:action="@{/auth/logout}" method="post">
-            <button type="submit">Logout</button>
-        </form>
-
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <form th:action="@{/home}" th:method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Home</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/users}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Profile</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/conversations}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Conversations</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auction/create}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Add Auction</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auction}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Browse Auctions</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auction/my-auctions}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">My Auctions</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/users/watchlist}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">My Watchlist</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/bids/history}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Bid History</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/promotions}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Promotion History</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auth/logout}" method="post">
+                                <button type="submit" class="btn btn-danger nav-link">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 
-    <div sec:authorize="isAnonymous()" style="display: flex; gap: 10px;">
-        <form th:action="@{/home}" method="get">
-            <input type="submit" value="Home"></input>
-        </form>
+    <!-- Anonymous User Menu -->
+    <div sec:authorize="isAnonymous()">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient">
+            <div class="container-fluid">
+                <!-- Navbar Brand -->
+                <a class="navbar-brand" href="#">Auction Platform</a>
 
-        <form th:action="@{/auth/login}" method="get">
-            <button type="submit">Login</button>
-        </form>
+                <!-- Toggler for responsive navigation -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAnonymous" aria-controls="navbarNavAnonymous" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <form th:action="@{/auth/register}" method="get">
-            <button type="submit">Register</button>
-        </form>
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse" id="navbarNavAnonymous">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <form th:action="@{/home}" method="get">
+                                <button type="submit" class="btn btn-link text-dark nav-link">Home</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auth/login}" method="get">
+                                <button type="submit" class="btn nav-link">Login</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
+                            <form th:action="@{/auth/register}" method="get">
+                                <button type="submit" class="btn nav-link">Register</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
 
+    <!-- Import Bootstrap JS (needed for dropdowns, toggles, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </div>

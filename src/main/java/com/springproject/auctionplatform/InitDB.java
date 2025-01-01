@@ -112,6 +112,77 @@ public class InitDB {
             promotion.setAmount(BigDecimal.valueOf(price));
             this.promotionRepository.save(promotion);
 
+            Auction auction4 = new Auction();
+            auction4.setTitle("Vintage 70's Vinyl Record Collection");
+            auction4.setStartTime(LocalDateTime.now());
+            auction4.setEndTime(LocalDateTime.now().plusDays(7));
+            auction4.setDescription("A collection of classic vinyl records from the 70's in excellent condition.");
+            auction4.setStatus(AuctionStatus.ONGOING);
+            auction4.setCategory(AuctionCategory.COLLECTIBLES);
+            auction4.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i4zPog-0j0JR_yZglxPhTPZXxN2iMTQ3Dw&s");
+            auction4.setStartingPrice(BigDecimal.valueOf(500L));
+            auction4.setCurrentPrice(auction4.getStartingPrice());
+            auction4.setSeller(user2);
+            auction4.setPromoted(false);
+            this.auctionRepository.save(auction4);
+
+            Auction auction5 = new Auction();
+            auction5.setTitle("Limited Edition Sneakers");
+            auction5.setStartTime(LocalDateTime.now());
+            auction5.setEndTime(LocalDateTime.now().plusDays(3));
+            auction5.setDescription("A pair of limited edition sneakers, size 10. Never worn.");
+            auction5.setStatus(AuctionStatus.ONGOING);
+            auction5.setCategory(AuctionCategory.FASHION);
+            auction5.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i4zPog-0j0JR_yZglxPhTPZXxN2iMTQ3Dw&s");
+            auction5.setStartingPrice(BigDecimal.valueOf(200L));
+            auction5.setCurrentPrice(auction5.getStartingPrice());
+            auction5.setSeller(user2);
+            auction5.setPromoted(false);
+            this.auctionRepository.save(auction5);
+
+            Auction auction6 = new Auction();
+            auction6.setTitle("Antique Pocket Watch");
+            auction6.setStartTime(LocalDateTime.now());
+            auction6.setEndTime(LocalDateTime.now().plusDays(10));
+            auction6.setDescription("An antique pocket watch from the 19th century. In working condition.");
+            auction6.setStatus(AuctionStatus.ONGOING);
+            auction6.setCategory(AuctionCategory.COLLECTIBLES);
+            auction6.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i4zPog-0j0JR_yZglxPhTPZXxN2iMTQ3Dw&s");
+            auction6.setStartingPrice(BigDecimal.valueOf(750L));
+            auction6.setCurrentPrice(auction6.getStartingPrice());
+            auction6.setSeller(user2);
+            auction6.setPromoted(false);
+            this.auctionRepository.save(auction6);
+
+            Auction auction7 = new Auction();
+            auction7.setTitle("Brand New iPhone 13");
+            auction7.setStartTime(LocalDateTime.now());
+            auction7.setEndTime(LocalDateTime.now().plusDays(2));
+            auction7.setDescription("Brand new, sealed iPhone 13, 128GB. Still in original packaging.");
+            auction7.setStatus(AuctionStatus.ONGOING);
+            auction7.setCategory(AuctionCategory.ELECTRONICS);
+            auction7.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i4zPog-0j0JR_yZglxPhTPZXxN2iMTQ3Dw&s");
+            auction7.setStartingPrice(BigDecimal.valueOf(800L));
+            auction7.setCurrentPrice(auction7.getStartingPrice());
+            auction7.setSeller(user2);
+            auction7.setPromoted(false);
+            this.auctionRepository.save(auction7);
+
+            Auction auction8 = new Auction();
+            auction8.setTitle("Smart Home Security Camera System");
+            auction8.setStartTime(LocalDateTime.now());
+            auction8.setEndTime(LocalDateTime.now().plusDays(6));
+            auction8.setDescription("A set of 4 smart security cameras with mobile app integration.");
+            auction8.setStatus(AuctionStatus.ONGOING);
+            auction8.setCategory(AuctionCategory.FURNITURE);
+            auction8.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8i4zPog-0j0JR_yZglxPhTPZXxN2iMTQ3Dw&s");
+            auction8.setStartingPrice(BigDecimal.valueOf(300L));
+            auction8.setCurrentPrice(auction8.getStartingPrice());
+            auction8.setSeller(user2);
+            auction8.setPromoted(false);
+            this.auctionRepository.save(auction8);
+
+
         }
 
 

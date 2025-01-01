@@ -2,17 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <!-- Bootstrap 4.3.1 CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div th:replace="~{fragments/menu :: menu}"></div>
+<!-- Include the menu fragment -->
+<div th:replace="~{fragments/menu :: menu}"></div>
 
+<div class="container mt-5">
+    <!-- Authenticated User Greeting -->
+    <h1 class="text-center" sec:authorize="isAuthenticated()" th:text="'Welcome home, ' + ${fullName} + '!'"></h1>
 
-    <h1 sec:authorize="isAuthenticated()" th:text="'Welcome home, ' + ${fullName} + '!'"></h1>
+    <!-- Anonymous User Greeting -->
+    <h1 class="text-center text-info" sec:authorize="isAnonymous()">Welcome, Guest!</h1>
+</div>
 
-    <h1 sec:authorize="isAnonymous()">Welcome!</h1>
-
-
+<!-- Bootstrap JS (for any interactive elements like dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

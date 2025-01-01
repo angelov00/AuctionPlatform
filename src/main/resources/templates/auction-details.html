@@ -45,18 +45,12 @@
     <div class="row">
         <div class="col-md-8">
             <h1 th:text="${auction.title}" class="mb-3"></h1>
-            <p><strong>Category:</strong> <span th:text="${auction.category}"></span></p>
+            <p><strong>Category: </strong> <span th:text="${auction.category}"></span></p>
             <p><strong>Current Price:</strong> <span th:text="${auction.currentPrice}"></span></p>
-            <p><strong>Seller:</strong> <span th:text="${auction.seller.username}"></span></p>
-            <p class="card-text">
-                <small class="text-muted">
-                    Remaining time: <span class="remaining-time"></span>
-                </small>
-            </p>
-            <p><strong>End Time:</strong>
-                <span th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span>
-            </p>
-            <p><strong>Description:</strong> <span th:text="${auction.description}"></span></p>
+            <p><strong>Seller: </strong> <span th:text="${auction.seller.username}"></span></p>
+            <p><strong>Remaining time: <span class="remaining-time"></span> </strong></p>
+            <p><strong>End Time: <span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span></strong></p>
+            <p><strong>Description: </strong> <span th:text="${auction.description}"></span></p>
         </div>
         <div class="col-md-4">
             <h2>Images</h2>
@@ -104,39 +98,41 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Select all the auctions on the page
-        const auctionCards = document.querySelectorAll('.card');
+        // Get the end time text
+        const endTimeText = document.querySelector('.end-time')?.textContent.trim();
+        const remainingTimeSpan = document.querySelector('.remaining-time');
 
-        auctionCards.forEach(function(card) {
-            const endTimeText = card.querySelector('.end-time').textContent.trim();
-            const remainingTimeSpan = card.querySelector('.remaining-time');
+        if (!endTimeText || !remainingTimeSpan) {
+            console.warn("End time or remaining time element is missing.");
+            return;
+        }
 
-            // Convert the end time to a JavaScript Date object
-            const endTime = new Date(endTimeText);
+        // Convert the end time to a JavaScript Date object
+        const endTime = new Date(endTimeText);
 
-            // Function to update the remaining time
-            function updateRemainingTime() {
-                const now = new Date();
-                const timeDiff = endTime - now;
+        // Function to update the remaining time
+        function updateRemainingTime() {
+            const now = new Date();
+            const timeDiff = endTime - now;
 
-                if (timeDiff <= 0) {
-                    remainingTimeSpan.textContent = "Auction ended";
-                    return;
-                }
-
-                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-                remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            if (timeDiff <= 0) {
+                remainingTimeSpan.textContent = "Auction ended";
+                clearInterval(timerInterval);
+                return;
             }
 
-            // Update the time initially
-            updateRemainingTime();
+            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
-            // Update the time every second
-            setInterval(updateRemainingTime, 1000);
-        });
+            remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        // Update the time initially
+        updateRemainingTime();
+
+        // Update the time every second
+        const timerInterval = setInterval(updateRemainingTime, 1000);
     });
 </script>
 

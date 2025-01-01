@@ -36,6 +36,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -154,7 +155,8 @@ public class AuctionServiceImpl {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        if(user.equals(auction.getSeller())) {
+        System.out.println("COMPARING: " + user.getId() + " AND " + auction.getSeller().getId());
+        if (Objects.equals(user.getId(), auction.getSeller().getId())) {
            throw new IllegalArgumentException("You cannot place a bid on your own auction!");
         }
 

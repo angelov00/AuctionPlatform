@@ -2,37 +2,54 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Profile</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Import Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
-<h1>Edit Profile</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Edit Profile</h1>
 
-<form th:action="@{/users/edit}" method="post" th:object="${user}">
-    <div>
-        <label for="firstName">First Name</label>
-        <input type="text" id="firstName" th:field="*{firstName}" required />
+    <!-- Form for editing profile -->
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/users/edit}" method="post" th:object="${user}">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" th:field="*{firstName}" class="form-control" required />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" th:field="*{lastName}" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" th:field="*{phone}" class="form-control" required />
+                </div>
+
+                <!-- Save Changes Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg mt-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div>
-        <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" th:field="*{lastName}" required />
-    </div>
-
-    <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" th:field="*{email}" required />
-    </div>
-
-    <div>
-        <label for="phone">Phone</label>
-        <input type="text" id="phone" th:field="*{phone}" required />
-    </div>
-
-    <button type="submit">Save Changes</button>
-</form>
+<!-- Import Bootstrap JS (needed for responsive behavior and components like dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

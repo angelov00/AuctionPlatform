@@ -7,6 +7,25 @@
 </head>
 <body>
 
+<style>
+    /* Персонализиран клас за бутона */
+    .btn-custom {
+        background-color: #d35400 !important; /* Задаваме фон с важност */
+        border-color: #d35400 !important; /* Задаваме граница с важност */
+        color: #fff !important; /* Задаваме текст в бяло */
+        text-decoration: none; /* Премахваме подчертаването от бутоните */
+    }
+
+    /* Hover ефект за бутона */
+    .btn-custom:hover {
+        background-color: #e67e22 !important; /* Променя фона при hover */
+        border-color: #e67e22 !important; /* Променя цвета на границата при hover */
+        color: #fff !important; /* Остава бял текст при hover */
+    }
+</style>
+
+
+
 <div th:replace="~{fragments/menu :: menu}"></div>
 
 <div class="container mt-5">
@@ -23,7 +42,7 @@
         <!-- Duration in Days -->
         <div class="form-group">
             <label for="durationDays">Duration (Days)</label>
-            <input type="number" class="form-control" id="durationDays" th:field="*{durationDays}" placeholder="Enter duration in days (1-30)" min="0" max="30" required>
+            <input type="number" class="form-control" id="durationDays" th:field="*{durationDays}" placeholder="Enter duration in days (1-30)" min="1" max="30" required>
             <div class="text-danger" th:if="${#fields.hasErrors('durationDays')}" th:errors="*{durationDays}"></div>
         </div>
 
@@ -75,7 +94,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Create Auction</button>
+        <button type="submit" class="btn-custom">Create Auction</button>
     </form>
 </div>
 

@@ -62,10 +62,10 @@ public class Auction {
     private boolean isPromoted = false;
 
     @Column(nullable = true, name = "promoted_at")
-    private LocalDateTime promotedAt;
+    private LocalDateTime promotedAt = null;
 
     @Column(nullable = true, name = "promotion_end_time")
-    private LocalDateTime promotionEndTime;
+    private LocalDateTime promotionEndTime = null;
 
     @Override
     public boolean equals(Object o) {
