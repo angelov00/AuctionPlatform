@@ -27,6 +27,9 @@ public class Promotion {
     @Column(nullable = false, name = "promotion_date")
     private LocalDateTime promotionDate;
 
+    @Column(nullable = false)
+    private int duration;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "payment_method")
     private PaymentMethod paymentMethod;
@@ -34,4 +37,7 @@ public class Promotion {
     @OneToOne
     @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
+
+    @ManyToOne
+    private User user;
 }

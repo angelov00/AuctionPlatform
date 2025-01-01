@@ -23,7 +23,7 @@
         <!-- Duration in Days -->
         <div class="form-group">
             <label for="durationDays">Duration (Days)</label>
-            <input type="number" class="form-control" id="durationDays" th:field="*{durationDays}" placeholder="Enter duration in days (1-30)" min="1" max="30" required>
+            <input type="number" class="form-control" id="durationDays" th:field="*{durationDays}" placeholder="Enter duration in days (1-30)" min="0" max="30" required>
             <div class="text-danger" th:if="${#fields.hasErrors('durationDays')}" th:errors="*{durationDays}"></div>
         </div>
 
@@ -58,13 +58,6 @@
             <label for="startingPrice">Starting Price</label>
             <input type="number" class="form-control" id="startingPrice" th:field="*{startingPrice}" placeholder="Enter starting price" step="0.01" min="0" required>
             <div class="text-danger" th:if="${#fields.hasErrors('startingPrice')}" th:errors="*{startingPrice}"></div>
-        </div>
-
-        <!-- Reserve Price -->
-        <div class="form-group">
-            <label for="reservePrice">Reserve Price</label>
-            <input type="number" class="form-control" id="reservePrice" th:field="*{reservePrice}" placeholder="Enter reserve price" step="0.01" min="0" required>
-            <div class="text-danger" th:if="${#fields.hasErrors('reservePrice')}" th:errors="*{reservePrice}"></div>
         </div>
 
         <!-- Promote Auction -->

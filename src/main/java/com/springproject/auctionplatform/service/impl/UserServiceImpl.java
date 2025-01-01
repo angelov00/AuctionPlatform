@@ -89,16 +89,27 @@ public class UserServiceImpl implements UserService {
     }
 
     // Премахване на търг от наблюдаваните
-    public void removeFromWatchlist(User user, Long auctionId) {
+    public Auction removeFromWatchlist(User user, Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new IllegalArgumentException("Auction not found"));
 
         user.getWatchlist().remove(auction);
         userRepository.save(user);
+        return auction;
     }
 
     // Извличане на всички наблюдавани търгове за потребителя
     public Set<Auction> getWatchlist(User user) {
         return user.getWatchlist();
+    }
+
+    public User updateUserProfile(User currentUser, User updatedUser) {
+        currentUser.setFirstName(updatedUser.getFirstName());
+        currentUser.setLastName(updatedUser.getLastName());
+        currentUser.setEmail(updatedUser.getEmail());
+        currentUser.setPhone(updatedUser.getPhone());
+        currentUser.setAvatarURL(updatedUser.getAvatarURL());
+
+        return userRepository.save(currentUser); // Записваме промените в базата данни
     }
 }

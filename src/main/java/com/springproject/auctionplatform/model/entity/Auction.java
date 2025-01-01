@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,16 +46,13 @@ public class Auction {
     private AuctionCategory category;
 
     @ElementCollection
-    private List<String> imageURLs;
+    private List<String> imageURLs = new ArrayList<>();
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal startingPrice;
 
     @Column(precision = 12, scale = 2)
     private BigDecimal currentPrice;
-
-    @Column(precision = 12, scale = 2)
-    private BigDecimal reservePrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_id", nullable = false)

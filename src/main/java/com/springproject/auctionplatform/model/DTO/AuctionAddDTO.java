@@ -16,7 +16,7 @@ public class AuctionAddDTO {
     @Size(min = 5, max = 100)
     private String title;
 
-    @Min(value = 1)
+    @Min(value = 0)
     @Max(value = 30)
     private int durationDays;
 
@@ -34,10 +34,6 @@ public class AuctionAddDTO {
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal startingPrice;
-
-    @NotNull
-    @DecimalMin(value = "0.0", inclusive = false)
-    private BigDecimal reservePrice;
 
     private Boolean promoteAuction;
 

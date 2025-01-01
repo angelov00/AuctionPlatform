@@ -16,9 +16,15 @@ import java.util.List;
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     List<Auction> findByStatus(AuctionStatus status);
+
     List<Auction> findBySeller_Username(String username);
+
     Page<Auction> findAll(Specification<Auction> specification, Pageable pageable);
 
     Page<Auction> findByIsPromoted(boolean b, Pageable pageable);
+
     List<Auction> findByIsPromoted(boolean b);
+
+    List<Auction> findAllBySellerUsernameAndStatus(String username, AuctionStatus status);
+
 }

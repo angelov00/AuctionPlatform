@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,6 +7,12 @@
 <body>
     <div th:replace="~{fragments/menu :: menu}"></div>
 
-    <h1>Welcome home!</h1>
+
+    <h1 sec:authorize="isAuthenticated()" th:text="'Welcome home, ' + ${fullName} + '!'"></h1>
+
+    <h1 sec:authorize="isAnonymous()">Welcome!</h1>
+
+
 </body>
 </html>
+

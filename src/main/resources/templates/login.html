@@ -5,6 +5,9 @@
     <title>Login Form</title>
 </head>
 <body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
     <div>
         <h2>Login</h2>
         <form th:action="@{/auth/login}" method="post">

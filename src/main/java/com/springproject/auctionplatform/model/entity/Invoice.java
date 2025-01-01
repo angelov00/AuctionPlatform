@@ -23,8 +23,8 @@ public class Invoice {
     private LocalDateTime issueDate;
 
     @OneToOne
-    @JoinColumn(name = "payment_id", nullable = false)  // Explicit foreign key for Payment
-    private Promotion payment;
+    @JoinColumn(name = "promotion_id", nullable = false)  // Explicit foreign key for Payment
+    private Promotion promotion;
 
     @Column(nullable = false)
     private BigDecimal amountExcludingTax;

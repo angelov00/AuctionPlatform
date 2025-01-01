@@ -72,7 +72,6 @@ public class AuctionServiceImpl {
         auction.setDescription(auctionAddDTO.getDescription());
         auction.setCategory(auctionAddDTO.getCategory());
         auction.setStartingPrice(auctionAddDTO.getStartingPrice());
-        auction.setReservePrice(auctionAddDTO.getReservePrice());
         auction.setCurrentPrice(auctionAddDTO.getStartingPrice());
         auction.setImageURLs(imageUrls);
         auction.setStatus(AuctionStatus.UPCOMING);
@@ -83,40 +82,12 @@ public class AuctionServiceImpl {
         return auctionRepository.save(auction);
     }
 
-
-//    private void scheduleAuctionStart(Auction auction) {
-//        LocalDateTime startTime = auction.getStartTime();
-//        LocalDateTime now = LocalDateTime.now();
-//
-//        if (startTime.isAfter(now)) {
-//            long delay = Duration.between(now, startTime).toMillis();
-//
-//            scheduler.schedule(() -> {
-//                activateAuction(auction);
-//            }, delay, TimeUnit.MILLISECONDS);
-//        } else {
-//            activateAuction(auction);
-//        }
-//    }
-
     private void activateAuction(Auction auction) {
         auction.setStatus(AuctionStatus.ONGOING);  // Променяме статуса на активен
         auctionRepository.save(auction);  // Записваме аукциона в базата
         logger.info("Auction '{}' has been activated.", auction.getTitle());
     }
 
-
-    private List<String> uploadImages(List<MultipartFile> images) throws IOException {
-        return images.stream()
-                .map(image -> {
-                    try {
-                        return cloudinaryService.uploadImage(image);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to upload image", e);
-                    }
-                })
-                .collect(Collectors.toList());
-    }
 
     @Scheduled(fixedRate = 60000) // Изпълнява се всяка минута
     public void updateAuctionStatuses() {
@@ -184,7 +155,7 @@ public class AuctionServiceImpl {
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
         if(user.equals(auction.getSeller())) {
-           // throw new IllegalArgumentException("You cannot place a bid on your own auction!");
+           throw new IllegalArgumentException("You cannot place a bid on your own auction!");
         }
 
         Bid bid = new Bid();
@@ -289,6 +260,8 @@ public class AuctionServiceImpl {
             promotion.setAmount(BigDecimal.valueOf((long) promotionDuration * costPerDay));
             promotion.setPaymentMethod(paymentMethod);
             promotion.setAuction(auction.get());
+            promotion.setUser(auction.get().getSeller());
+            promotion.setDuration(promotionDuration);
             this.promotionRepository.save(promotion);
 
         } else {
@@ -297,4 +270,23 @@ public class AuctionServiceImpl {
 
         return promotion;
     }
+
+    public List<Auction> getAuctionsBySellerAndStatus(String username, AuctionStatus status) {
+        return auctionRepository.findAllBySellerUsernameAndStatus(username, status);
+    }
+
+    private List<String> uploadImages(List<MultipartFile> images) throws IOException {
+        return images.stream()
+                .map(image -> {
+                    try {
+                        return cloudinaryService.uploadImage(image);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to upload image", e);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
 }

@@ -55,7 +55,7 @@
                         <h5 class="card-title" th:text="${auction.title}"></h5>
                         <p class="card-text" th:text="${auction.description}"></p>
                         <p class="card-text">
-                            <small class="text-muted">End Time: <span class="end-time" th:text="${auction.endTime}"></span></small>
+                            <small class="text-muted">End Time:<span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span></small>
                         </p>
                         <p class="card-text">
                             <small class="text-muted">
@@ -80,7 +80,13 @@
                         <h5 class="card-title" th:text="${auction.title}"></h5>
                         <p class="card-text" th:text="${auction.description}"></p>
                         <p class="card-text">
-                            <small class="text-muted">End Time: <span class="end-time" th:text="${auction.endTime}"></span></small>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                End Time:
+                                <span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span>
+                            </small>
+                        </p>
+
                         </p>
                         <p class="card-text">
                             <small class="text-muted">
@@ -99,15 +105,15 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item" th:if="${regularAuctions.hasPrevious()}">
-                        <a class="page-link" th:href="@{/auctions(page=${regularAuctions.number - 1})}" aria-label="Previous">
+                        <a class="page-link" th:href="@{/auction(page=${regularAuctions.number - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, regularAuctions.totalPages - 1)}">
-                        <a class="page-link" th:href="@{/auctions(page=${i})}" th:text="${i + 1}"></a>
+                        <a class="page-link" th:href="@{/auction(page=${i})}" th:text="${i + 1}"></a>
                     </li>
                     <li class="page-item" th:if="${regularAuctions.hasNext()}">
-                        <a class="page-link" th:href="@{/auctions(page=${regularAuctions.number + 1})}" aria-label="Next">
+                        <a class="page-link" th:href="@{/auction(page=${regularAuctions.number + 1})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

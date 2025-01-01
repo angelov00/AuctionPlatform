@@ -2,50 +2,145 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Auction Details</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .auction-image {
+            max-width: 300px;
+            margin: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .bid-form label {
+            font-weight: bold;
+        }
+
+        .bid-history {
+            margin-top: 20px;
+        }
+
+        .bid-history li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .remaining-time {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
 </head>
 <body>
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
-<h1 th:text="${auction.title}"></h1>
-<p><strong>Category:</strong> <span th:text="${auction.category}"></span></p>
-<p><strong>Current Price:</strong> <span th:text="${auction.currentPrice}"></span></p>
-<p><strong>Description:</strong> <span th:text="${auction.description}"></span></p>
+<div class="container mt-5">
+    <!-- Error Message -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}"></p>
+    </div>
 
-<h2>Images</h2>
-<div>
-    <img th:each="url : ${auction.imageURLs}"
-         th:src="${url}"
-         alt="Auction Image"
-         style="max-width: 300px; margin: 10px;">
+    <!-- Auction Details -->
+    <div class="row">
+        <div class="col-md-8">
+            <h1 th:text="${auction.title}" class="mb-3"></h1>
+            <p><strong>Category:</strong> <span th:text="${auction.category}"></span></p>
+            <p><strong>Current Price:</strong> <span th:text="${auction.currentPrice}"></span></p>
+            <p><strong>Seller:</strong> <span th:text="${auction.seller.username}"></span></p>
+            <p class="card-text">
+                <small class="text-muted">
+                    Remaining time: <span class="remaining-time"></span>
+                </small>
+            </p>
+            <p><strong>End Time:</strong>
+                <span th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span>
+            </p>
+            <p><strong>Description:</strong> <span th:text="${auction.description}"></span></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Images</h2>
+            <div class="d-flex flex-wrap">
+                <img th:each="url : ${auction.imageURLs}" th:src="${url}" alt="Auction Image" class="auction-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-5">
+        <h2>Actions</h2>
+        <div>
+            <form th:action="@{/users/watchlist/add/{auctionId}(auctionId=${auction.id})}" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Add to Watchlist</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bid Form -->
+    <div class="mt-5">
+        <h2>Place a Bid</h2>
+        <form th:action="@{/auction/bid}" method="post" class="bid-form">
+            <input type="hidden" th:name="auctionId" th:value="${auction.id}">
+            <div class="form-group">
+                <label for="amount">Bid Amount:</label>
+                <input type="number" id="amount" name="amount" class="form-control" step="0.01" required>
+            </div>
+            <button type="submit" class="btn btn-success">Place Bid</button>
+        </form>
+    </div>
+
+    <!-- Bid History -->
+    <div class="bid-history mt-5">
+        <h2>Bid History</h2>
+        <ul class="list-unstyled">
+            <li th:each="bid : ${bids}">
+                <strong th:text="${bid.user.username}"></strong> -
+                <span th:text="${bid.amount}"></span> -
+                <span th:text="${bid.time}"></span>
+            </li>
+        </ul>
+    </div>
 </div>
 
-<!-- Add to Watchlist -->
-<h2>Actions</h2>
-<div>
-    <form th:action="@{/users/watchlist/add/{auctionId}(auctionId=${auction.id})}" method="post" style="display: inline;">
-        <button type="submit" class="btn btn-primary">Add to Watchlist</button>
-    </form>
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all the auctions on the page
+        const auctionCards = document.querySelectorAll('.card');
 
-<!-- Bid Form -->
-<h2>Place a Bid</h2>
-<form th:action="@{/auction/bid}" method="post">
-    <input type="hidden" th:name="auctionId" th:value="${auction.id}">
-    <label for="amount">Bid Amount:</label>
-    <input type="number" id="amount" name="amount" step="0.01" required>
-    <button type="submit">Place Bid</button>
-</form>
+        auctionCards.forEach(function(card) {
+            const endTimeText = card.querySelector('.end-time').textContent.trim();
+            const remainingTimeSpan = card.querySelector('.remaining-time');
 
-<!-- Bids List -->
-<h2>Bid history</h2>
-<ul>
-    <li th:each="bid : ${bids}">
-        <span th:text="${bid.user.username}"></span> -
-        <span th:text="${bid.amount}"></span> -
-        <span th:text="${bid.time}"></span>
-    </li>
-</ul>
+            // Convert the end time to a JavaScript Date object
+            const endTime = new Date(endTimeText);
+
+            // Function to update the remaining time
+            function updateRemainingTime() {
+                const now = new Date();
+                const timeDiff = endTime - now;
+
+                if (timeDiff <= 0) {
+                    remainingTimeSpan.textContent = "Auction ended";
+                    return;
+                }
+
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            // Update the time initially
+            updateRemainingTime();
+
+            // Update the time every second
+            setInterval(updateRemainingTime, 1000);
+        });
+    });
+</script>
+
+
+
 </body>
 </html>
