@@ -7,6 +7,8 @@
 </head>
 <body>
 
+<div th:replace="~{fragments/menu :: menu}"></div>
+
 <div class="container mt-5">
     <h2>Create Auction</h2>
     <form th:action="@{/auction/create}" th:object="${auctionAddDTO}" method="post" enctype="multipart/form-data">

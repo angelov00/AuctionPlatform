@@ -11,11 +11,23 @@
         <form th:action="@{/conversations}" method="get" >
             <button type="submit">Conversations</button>
         </form>
+
+        <form th:action="@{/auction/create}" method="get" >
+            <button type="submit">Add auction</button>
+        </form>
+
+        <form th:action="@{/auction}" method="get" >
+            <button type="submit">Browse auctions</button>
+        </form>
     </div>
 
     <div sec:authorize="isAnonymous()">
         <form th:action="@{/auth/login}" method="get">
             <button type="submit">Login</button>
         </form>
+        <form th:action="@{/auth/register}" method="get">
+            <button type="submit">Register</button>
+        </form>
     </div>
+
 </div>

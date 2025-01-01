@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Browse Auctions</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<h1>Browse Auctions</h1>
+
+<!-- Filter Form -->
+<form th:action="@{/auction}" method="get">
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+        <option value="">All</option>
+        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
+    </select>
+
+    <label for="minPrice">Min Price:</label>
+    <input type="number" id="minPrice" name="minPrice" step="0.01">
+
+    <label for="maxPrice">Max Price:</label>
+    <input type="number" id="maxPrice" name="maxPrice" step="0.01">
+
+    <button type="submit">Filter</button>
+</form>
+
+<!-- Auctions List -->
+<div>
+    <h2>Auction Results</h2>
+    <div th:if="${auctions.isEmpty()}">No auctions found.</div>
+    <div th:if="${not auctions.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Current Price</th>
+                <th>Status</th>
+                <th>End Time</th>
+                <th>Time Left</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="auction : ${auctions}">
+                <td th:text="${auction.title}"></td>
+                <td th:text="${auction.category}"></td>
+                <td th:text="${auction.currentPrice}"></td>
+                <td th:text="${auction.status}"></td>
+                <td th:text="${auction.endTime}"></td>
+                <td>
+                    <span class="time-left"
+                          th:data-end-time="${auction.endTime}"
+                          th:text="'Calculating...'">
+                    </span>
+                </td>
+                <td>
+                    <a th:href="@{/auction/details/{id}(id=${auction.id})}" class="btn btn-primary">View Details</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Добавяме JavaScript за динамично обновяване на оставащото време -->
+<script>
+    function updateTimeLeft() {
+        const timeLeftElements = document.querySelectorAll('.time-left');
+        timeLeftElements.forEach(el => {
+            const endTime = new Date(el.dataset.endTime); // Крайното време от data-end-time
+            const now = new Date();
+            const timeDiff = endTime - now;
+
+            if (timeDiff <= 0) {
+                el.textContent = 'Auction Ended';
+            } else {
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                el.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            }
+        });
+    }
+
+    // Обновяваме оставащото време всяка секунда
+    setInterval(updateTimeLeft, 1000);
+    updateTimeLeft(); // Първоначално извикване
+</script>
+
+</body>
+</html>

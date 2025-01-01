@@ -33,7 +33,4 @@ public class Bid {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
-
-    @Enumerated(EnumType.STRING)
-    private AuctionStatus status;
 }

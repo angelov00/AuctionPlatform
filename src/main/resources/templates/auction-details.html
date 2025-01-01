@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Auction Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<h1 th:text="${auction.title}"></h1>
+<p><strong>Category:</strong> <span th:text="${auction.category}"></span></p>
+<p><strong>Current Price:</strong> <span th:text="${auction.currentPrice}"></span></p>
+<p><strong>Description:</strong> <span th:text="${auction.description}"></span></p>
+
+<h2>Images</h2>
+<div>
+    <img th:each="url : ${auction.imageURLs}"
+         th:src="${url}"
+         alt="Auction Image"
+         style="max-width: 300px; margin: 10px;">
+</div>
+
+<!-- Bid Form -->
+<h2>Place a Bid</h2>
+<form th:action="@{/auction/bid}" method="post">
+    <input type="hidden" th:name="auctionId" th:value="${auction.id}">
+    <label for="amount">Bid Amount:</label>
+    <input type="number" id="amount" name="amount" step="0.01" required>
+    <button type="submit">Place Bid</button>
+</form>
+
+<!-- Bids List -->
+<h2>Current Bids</h2>
+<ul>
+    <li th:each="bid : ${bids}">
+        <span th:text="${bid.user.username}"></span> -
+        <span th:text="${bid.amount}"></span> -
+        <span th:text="${bid.time}"></span>
+    </li>
+</ul>
+</body>
+</html>
