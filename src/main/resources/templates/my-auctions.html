@@ -103,42 +103,49 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get the end time text
-        const endTimeText = document.querySelector('.end-time')?.textContent.trim();
-        const remainingTimeSpan = document.querySelector('.remaining-time');
+        // Получаваме всички елементи за "end-time" и "remaining-time"
+        const endTimeElements = document.querySelectorAll('.end-time');
+        const remainingTimeElements = document.querySelectorAll('.remaining-time');
 
-        if (!endTimeText || !remainingTimeSpan) {
+        // Проверка дали имаме съответстващи елементи
+        if (endTimeElements.length === 0 || remainingTimeElements.length === 0) {
             console.warn("End time or remaining time element is missing.");
             return;
         }
 
-        // Convert the end time to a JavaScript Date object
-        const endTime = new Date(endTimeText);
-
-        // Function to update the remaining time
+        // Функция за актуализиране на оставащото време за всеки търг
         function updateRemainingTime() {
-            const now = new Date();
-            const timeDiff = endTime - now;
+            // За всеки търг
+            endTimeElements.forEach((endTimeElement, index) => {
+                const remainingTimeElement = remainingTimeElements[index];
+                const endTimeText = endTimeElement.textContent.trim();
 
-            if (timeDiff <= 0) {
-                remainingTimeSpan.textContent = "Auction ended";
-                clearInterval(timerInterval);
-                return;
-            }
+                // Преобразуваме времето на края в JavaScript Date обект
+                const endTime = new Date(endTimeText);
 
-            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                const now = new Date();
+                const timeDiff = endTime - now;
 
-            remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                if (timeDiff <= 0) {
+                    remainingTimeElement.textContent = "Auction ended";
+                } else {
+                    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                    remainingTimeElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                }
+            });
         }
 
-        // Update the time initially
+        // Актуализиране на времето при зареждане
         updateRemainingTime();
 
-        // Update the time every second
-        const timerInterval = setInterval(updateRemainingTime, 1000);
+        // Актуализиране на времето всяка секунда
+        setInterval(updateRemainingTime, 1000);
     });
+
+
 </script>
 
 

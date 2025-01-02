@@ -45,7 +45,7 @@ public class Auction {
     @Column(nullable = false)
     private AuctionCategory category;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> imageURLs = new ArrayList<>();
 
     @Column(nullable = false, precision = 12, scale = 2)
@@ -57,6 +57,10 @@ public class Auction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_id", nullable = false)
     private User seller;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="buyer_id", nullable = true)
+    private User buyer;
 
     @Column(nullable = false, name = "is_promoted")
     private boolean isPromoted = false;

@@ -28,4 +28,6 @@ public class AuctionPreviewDTO {
     private String mainPhotoURL;
 
     private BigDecimal currentPrice;
+
+    private BigDecimal startingPrice;
 }

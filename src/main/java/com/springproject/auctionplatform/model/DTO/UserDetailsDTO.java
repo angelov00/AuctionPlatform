@@ -20,7 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserDetailsDTO {
 
-
     private Long id;
 
     private String username;
@@ -34,7 +33,6 @@ public class UserDetailsDTO {
     private String phone;
 
     private String avatarURL;
-
 
     private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 

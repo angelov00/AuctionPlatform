@@ -15,6 +15,10 @@
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
+<div th:if="${message}" class="alert alert-success text-center" role="alert">
+    <p th:text="${message}"></p>
+</div>
+
 <!-- Main container for the profile -->
 <div class="container mt-5">
     <h1 class="text-center mb-4" th:text="'Profile of ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
@@ -39,8 +43,9 @@
 
             <!-- Button for editing profile -->
             <div class="mt-4 text-center">
-                <a th:href="@{/users/edit}" class="btn btn-primary btn-lg">Edit Profile</a>
+                <a th:href="@{/users/edit}" class="btn btn-lg text-white bg-custom">Edit Profile</a>
             </div>
+
         </div>
     </div>
 </div>

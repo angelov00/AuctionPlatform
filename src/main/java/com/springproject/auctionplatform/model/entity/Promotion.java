@@ -1,7 +1,6 @@
 package com.springproject.auctionplatform.model.entity;
 
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
-import com.springproject.auctionplatform.model.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

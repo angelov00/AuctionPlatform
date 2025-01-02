@@ -18,7 +18,7 @@ public class AuctionAddDTO {
 
     @Min(value = 1)
     @Max(value = 30)
-    private int durationDays;
+    private Integer durationDays;
 
     @NotBlank(message = "Enter a description!")
     @Size(min = 10, max = 1000)

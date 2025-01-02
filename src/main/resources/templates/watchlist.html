@@ -38,7 +38,7 @@
                     <a th:href="@{/auction/details/{id}(id=${auction.id})}" th:text="${auction.title}"></a>
                 </td>
                 <td th:text="${auction.startingPrice}"></td>
-                <td th:text="${auction.endTime}" class="end-time"></td>
+                <td class="end-time"> <span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span></td>
                 <td>
                     <!-- Поле за оставащо време -->
                     <span class="remaining-time">Calculating...</span>
