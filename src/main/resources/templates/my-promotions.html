@@ -12,13 +12,11 @@
 <div class="container mt-5">
     <h1>My Promotions</h1>
 
-    <!-- Проверка дали има промоции -->
     <div th:if="${promotions.isEmpty()}">
         <p>You have no promotions.</p>
     </div>
 
     <div th:if="${!promotions.isEmpty()}">
-        <!-- Таблица с промоции -->
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -31,10 +29,9 @@
             <tbody>
             <tr th:each="promotion : ${promotions}">
                 <td th:text="${promotion.amount}"></td>
-                <td th:text="${promotion.promotionDate}"></td>
+                <td><span class="end-time" th:text="${#temporals.format(promotion.promotionDate, 'dd MMM yyyy HH:mm:ss')}"></span></td>
                 <td th:text="${promotion.paymentMethod}"></td>
                 <td>
-                    <!-- Бутон за изтегляне на PDF фактура -->
                     <a th:href="@{/promotions/generateInvoice/{promotionId}(promotionId=${promotion.id})}"
                        class="btn btn-success">
                         Download Invoice
