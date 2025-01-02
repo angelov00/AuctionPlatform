@@ -1,36 +1,35 @@
 package com.springproject.auctionplatform.controller;
 
+import com.springproject.auctionplatform.model.DTO.AuctionPreviewDTO;
+import com.springproject.auctionplatform.model.DTO.UserUpdateDTO;
 import com.springproject.auctionplatform.model.entity.Auction;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.config.security.CustomUserDetails;
 import com.springproject.auctionplatform.service.UserService;
-import com.springproject.auctionplatform.service.impl.UserServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/profile")
     public String getUserProfile(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-       // User user = userService.getUserByUsername(username);
-       // model.addAttribute("user", user);
-
-        if(userDetails == null) return "redirect:/auth/login";
-
         model.addAttribute("user", userDetails.getUser());
         return "user-profile";
     }
@@ -38,29 +37,35 @@ public class UserController {
     @GetMapping("/edit")
     public String editProfile(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
-        if (user == null) {
-            return "redirect:/auth/login"; // Пренасочване, ако потребителят не е логнат
-        }
-        model.addAttribute("user", user);
-        return "edit-user-profile"; // Връща изглед за редактиране на профила
+
+        UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+        userUpdateDTO.setFirstName(user.getFirstName());
+        userUpdateDTO.setLastName(user.getLastName());
+        userUpdateDTO.setEmail(user.getEmail());
+        userUpdateDTO.setPhone(user.getPhone());
+
+        model.addAttribute("userUpdateDTO", userUpdateDTO);
+
+        return "edit-user-profile";
     }
 
     @PostMapping("/edit")
     public String updateProfile(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                @ModelAttribute User updatedUser, Model model,
+                                @Valid @ModelAttribute UserUpdateDTO updatedUser,
+                                BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes) {
 
-        User user = userDetails.getUser();
-        if (user == null) {
-            return "redirect:/auth/login"; // Пренасочване, ако потребителят не е логнат
+        if (bindingResult.hasErrors()) {
+            return "edit-user-profile"; // Връщане на формата с грешки
         }
 
+        User user = userDetails.getUser();
         userService.updateUserProfile(user, updatedUser);
 
-        //model.addAttribute("message", "Profile updated successfully!");
         redirectAttributes.addFlashAttribute("message", "Profile updated successfully!");
-        return "redirect:/users/profile"; // Пренасочва обратно към страницата с профила
+        return "redirect:/users/profile";
     }
+
 
     @GetMapping
     public String getAuthenticatedUserProfile(Model model, @AuthenticationPrincipal CustomUserDetails user) {
@@ -72,7 +77,7 @@ public class UserController {
     @GetMapping("/watchlist")
     public String getWatchList(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
-        Set<Auction> watchlist = userService.getWatchlist(user);
+        List<AuctionPreviewDTO> watchlist = userService.getWatchlist(user);
         model.addAttribute("watchlist", watchlist);
         return "watchlist";
     }
@@ -89,7 +94,7 @@ public class UserController {
         User user = userDetails.getUser();
         Auction auction = userService.removeFromWatchlist(user, auctionId);
         redirectAttributes.addFlashAttribute("message", "You have removed auction '" + auction.getTitle() + "' from your watchlist.");
-        return "redirect:/users/watchlist"; // Пренасочване към страницата с наблюдавани търгове
+        return "redirect:/users/watchlist";
     }
 
 

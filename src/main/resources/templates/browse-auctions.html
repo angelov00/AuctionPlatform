@@ -19,6 +19,16 @@
             background-color: #e67e22 !important; /* Променяме цвета при hover */
             border-color: #e67e22 !important; /* Променяме границата при hover */
         }
+
+        .btn-clear {
+            background-color: #7f8c8d !important;
+            border-color: #7f8c8d !important;
+        }
+
+        .btn-clear:hover {
+            background-color: #95a5a6 !important;
+            border-color: #95a5a6 !important;
+        }
     </style>
 </head>
 <body>
@@ -58,6 +68,8 @@
 
         <div class="mt-3">
             <button type="submit" class="btn">Filter</button>
+            <!-- Добавен бутон за изчистване на филтъра -->
+            <a href="/auction" class="btn btn-clear">Clear Filter</a>
         </div>
     </form>
 
@@ -85,7 +97,9 @@
     </div>
 
     <h3 class="mt-5">Regular Auctions</h3>
-    <div th:if="${regularAuctions != null}">
+
+    <!-- Проверка за налични редовни търгове -->
+    <div th:if="${regularAuctions != null and regularAuctions.content.size() > 0}">
         <div class="row">
             <div class="col-md-4" th:each="auction : ${regularAuctions.content}">
                 <div class="card mb-4">
@@ -111,7 +125,7 @@
             </div>
         </div>
 
-        <!-- Pagination -->
+        <!-- Пагинация за редовни търгове -->
         <div class="d-flex justify-content-center mt-4">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
@@ -132,6 +146,12 @@
             </nav>
         </div>
     </div>
+
+    <!-- Ако няма редовни търгове -->
+    <div th:if="${regularAuctions == null or regularAuctions.content.size() == 0}" class="alert alert-info">
+        No regular auctions available at the moment.
+    </div>
+
 </div>
 
 <!-- JavaScript -->

@@ -88,9 +88,9 @@
         <h2>Bid History</h2>
         <ul class="list-unstyled">
             <li th:each="bid : ${bids}">
-                <strong th:text="${bid.user.username}"></strong> -
+                <strong th:text="${bid.bidder.username}"></strong> -
                 <span th:text="${bid.amount}"></span> -
-                <span th:text="${bid.time}"></span>
+                <span class="end-time" th:text="${#temporals.format(bid.time, 'dd MMM yyyy HH:mm:ss')}"></span>
             </li>
         </ul>
     </div>

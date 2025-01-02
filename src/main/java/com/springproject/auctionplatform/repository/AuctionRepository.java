@@ -25,6 +25,8 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     List<Auction> findByIsPromoted(boolean b);
 
+    long countByIsPromoted(boolean b);
+
     List<Auction> findAllBySellerUsernameAndStatus(String username, AuctionStatus status);
 
 }

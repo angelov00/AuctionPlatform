@@ -1,6 +1,7 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.model.DTO.UserRegisterDTO;
+import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class AuthController {
             model.addAttribute("registerDTO", new UserRegisterDTO());
         }
 
+        model.addAttribute("categories", AuctionCategory.values());
+
         return "register";
     }
 
@@ -46,7 +49,6 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("registerDTO", registerDTO);
             redirectAttributes.addFlashAttribute(MODEL_KEY_PREFIX + "registerDTO", bindingResult);
-
             return "redirect:register";
         }
 

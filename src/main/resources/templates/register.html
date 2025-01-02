@@ -133,7 +133,8 @@
         <div class="form-group">
             <label for="preferredCategories">Preferred Categories</label>
             <select th:field="*{preferredCategories}" id="preferredCategories" multiple class="form-control">
-                <option th:each="category : ${T(com.springproject.auctionplatform.model.enums.AuctionCategory).values()}"
+                <option value="" disabled selected>Select a category</option>
+                <option th:each="category : ${categories}"
                         th:value="${category}" th:text="${category}" th:selected="${#sets.contains(registerDTO.preferredCategories, category)}">
                     Preferred category
                 </option>

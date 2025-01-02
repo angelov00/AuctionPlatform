@@ -1,10 +1,10 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.config.security.CustomUserDetails;
+import com.springproject.auctionplatform.model.DTO.BidDetailsDTO;
 import com.springproject.auctionplatform.model.entity.Bid;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.service.BidService;
-import com.springproject.auctionplatform.service.impl.BidServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,10 +18,10 @@ import java.util.List;
 @RequestMapping("/bids")
 public class BidController {
 
-    private final BidServiceImpl bidService;
+    private final BidService bidService;
 
     @Autowired
-    public BidController(BidServiceImpl bidService) {
+    public BidController(BidService bidService) {
         this.bidService = bidService;
     }
 

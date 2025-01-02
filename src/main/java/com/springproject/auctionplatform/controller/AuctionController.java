@@ -1,17 +1,15 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.config.security.CustomUserDetails;
-import com.springproject.auctionplatform.model.DTO.AuctionAddDTO;
-import com.springproject.auctionplatform.model.DTO.AuctionFilterDTO;
-import com.springproject.auctionplatform.model.DTO.AuctionPreviewDTO;
+import com.springproject.auctionplatform.model.DTO.*;
 import com.springproject.auctionplatform.model.entity.Auction;
 import com.springproject.auctionplatform.model.entity.Bid;
 import com.springproject.auctionplatform.model.entity.Promotion;
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
-import com.springproject.auctionplatform.repository.PromotionRepository;
-import com.springproject.auctionplatform.service.impl.AuctionServiceImpl;
+import com.springproject.auctionplatform.service.AuctionService;
+import com.springproject.auctionplatform.service.PromotionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,19 +23,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/auction")
 public class AuctionController {
 
-    private final AuctionServiceImpl auctionService;
-    private final PromotionRepository promotionRepository;
+    public static final int PROMOTED_PER_PAGE= 3;
+    private final AuctionService auctionService;
+    private final PromotionService promotionService;
 
     @Autowired
-    public AuctionController(AuctionServiceImpl auctionService, PromotionRepository promotionRepository) {
+    public AuctionController(AuctionService auctionService, PromotionService promotionService) {
         this.auctionService = auctionService;
-        this.promotionRepository = promotionRepository;
+        this.promotionService = promotionService;
     }
 
     @GetMapping
@@ -47,15 +46,9 @@ public class AuctionController {
             @RequestParam(value = "size", defaultValue = "6") int size,
             Model model) {
 
-        // TODO
-        // If there is no specified category - show user preferred categories
+        int currentPromotionPage = (page * PROMOTED_PER_PAGE) % (int) this.auctionService.getPromotedAuctionsCount();
 
-        final int promotedSize = 3;
-
-        // TODO
-        // Add promoted auctions pages logic
-
-        Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(0, promotedSize);
+        Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(currentPromotionPage, PROMOTED_PER_PAGE);
         Page<AuctionPreviewDTO> pagedRegularAuctions = auctionService.getRegularAuctions(filter, page, size);
 
         model.addAttribute("promotedAuctions", pagedPromotedAuctions);
@@ -78,19 +71,17 @@ public class AuctionController {
                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", AuctionCategory.values());
             return "add-auction";
         }
 
         try {
-
             Auction auction = auctionService.createAuction(auctionAddDTO, userDetails.getUsername());
-
-            System.out.println("Promotion? " + auctionAddDTO.getPromoteAuction());
-            if (!auctionAddDTO.getPromoteAuction()) {
-                return "redirect:/home";
+            if (auctionAddDTO.getPromoteAuction()) {
+                return "redirect:/auction/promote/" + auction.getId();
             }
 
-            return "redirect:/auction/promote/" + auction.getId();
+            return "redirect:/home";
         } catch (IOException e) {
             model.addAttribute("error", e.getMessage());
             return "add-auction";
@@ -99,9 +90,11 @@ public class AuctionController {
 
     @GetMapping("/details/{id}")
     public String auctionDetails(@PathVariable Long id, Model model) {
-        Auction auction = auctionService.getAuctionById(id);
+
+        AuctionDetailsDTO auction = this.auctionService.getDetailsById(id);
         model.addAttribute("auction", auction);
-        List<Bid> bids = auctionService.getBidsForAuction(auction.getId());
+
+        List<BidDetailsDTO> bids = auctionService.getBidsForAuction(auction.getId());
         bids.sort((b1, b2) -> b2.getTime().compareTo(b1.getTime()));
 
         model.addAttribute("bids", bids);
@@ -119,7 +112,6 @@ public class AuctionController {
             auctionService.placeBid(auctionId, amount, userDetails.getUsername());
             return "redirect:/auction/details/" + auctionId;
         } catch (IllegalArgumentException e) {
-            System.out.println("ERROR: " + e.getMessage());
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/auction/details/" + auctionId;
         }
@@ -129,9 +121,9 @@ public class AuctionController {
     public String myAuctions(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         String username = userDetails.getUsername();
 
-        List<Auction> ongoingAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.ONGOING);
-        List<Auction> toBeFinalizedAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.WAITING_FOR_FINALIZATION);
-        List<Auction> completedAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.COMPLETED);
+        List<AuctionPreviewDTO> ongoingAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.ONGOING);
+        List<AuctionPreviewDTO> toBeFinalizedAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.WAITING_FOR_FINALIZATION);
+        List<AuctionPreviewDTO> completedAuctions = auctionService.getAuctionsBySellerAndStatus(username, AuctionStatus.COMPLETED);
 
         model.addAttribute("ongoingAuctions", ongoingAuctions);
         model.addAttribute("toBeFinalizedAuctions", toBeFinalizedAuctions);
@@ -143,13 +135,14 @@ public class AuctionController {
     @GetMapping("/promote/{auctionId}")
     public String promoteAuction(@PathVariable Long auctionId, Model model) {
 
-        Optional<Auction> auction = auctionService.findById(auctionId);
-        if (auction.isPresent()) {
-            model.addAttribute("auction", auction.get());
-        } else {
-            return "redirect:/auction";
+        try {
+        AuctionDetailsDTO auction = this.auctionService.getDetailsById(auctionId);
+        model.addAttribute("auction", auction);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
         }
         return "promote-auction";
+
     }
 
 
@@ -172,11 +165,13 @@ public class AuctionController {
 
     @GetMapping("/promotion-success/{promotionId}")
     public String showPromotionSuccess(@PathVariable Long promotionId, Model model) {
-        Promotion promotion = promotionRepository.getPromotionById(promotionId);
 
+        PromotionDTO promotion = this.promotionService.getPromotionById(promotionId);
         model.addAttribute("promotion", promotion);
         return "promotion-success";
     }
+
+
 
 
 

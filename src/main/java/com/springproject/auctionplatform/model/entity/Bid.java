@@ -1,15 +1,12 @@
 package com.springproject.auctionplatform.model.entity;
 
-import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter
