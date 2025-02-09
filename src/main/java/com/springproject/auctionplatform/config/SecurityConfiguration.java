@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,14 +18,13 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // TODO change anyRequest() to just specific requests where user must be logged in
         http.authorizeHttpRequests(configurer ->
                 configurer
                     .requestMatchers("/auth/register", "/home", "/").permitAll()
                     .anyRequest().authenticated())
+            .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form
                 .loginPage("/auth/login")
-//              .loginProcessingUrl("/auth/login")
                 .failureUrl("/auth/login?error")
                 .defaultSuccessUrl("/home", true)
                 .permitAll())
