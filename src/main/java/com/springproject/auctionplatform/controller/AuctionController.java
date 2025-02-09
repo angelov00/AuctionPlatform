@@ -128,6 +128,7 @@ public class AuctionController {
         model.addAttribute("ongoingAuctions", ongoingAuctions);
         model.addAttribute("toBeFinalizedAuctions", toBeFinalizedAuctions);
         model.addAttribute("completedAuctions", completedAuctions);
+        model.addAttribute("conversationDTO", new ConversationDTO());
 
         return "my-auctions";
     }

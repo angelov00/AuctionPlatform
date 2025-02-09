@@ -1,10 +1,7 @@
 package com.springproject.auctionplatform.util;
 
 import com.springproject.auctionplatform.model.DTO.*;
-import com.springproject.auctionplatform.model.entity.Auction;
-import com.springproject.auctionplatform.model.entity.Bid;
-import com.springproject.auctionplatform.model.entity.Promotion;
-import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.entity.*;
 
 public class ModelMapper {
 
@@ -17,7 +14,17 @@ public class ModelMapper {
                 auction.getCategory(),
                 auction.getImageURLs().getFirst(),
                 auction.getCurrentPrice(),
+                auction.getSeller().getId(),
+                auction.getBuyer() == null ? -1 : auction.getBuyer().getId(),
                 auction.getStartingPrice()
+        );
+    }
+
+    public static ConversationPreviewDTO convertConversationToConversationPreviewDTO(Conversation conversation, String username) {
+        return new ConversationPreviewDTO(
+                conversation.getId(),
+                conversation.getAuction().getTitle(),
+                conversation.getParticipants().stream().map(User::getUsername).filter(u -> !u.equals(username)).findFirst().get()
         );
     }
 

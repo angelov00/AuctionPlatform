@@ -1,34 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Chat</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    .chat-container {
+      width: 50%;
+      margin: 50px auto;
+      background-color: #ffffff;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    .chat-header {
+      background-color: #d15400;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .chat-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .message {
+      margin-bottom: 15px;
+    }
+
+    .message strong {
+      color: #d15400;
+      font-size: 16px;
+    }
+
+    .message span {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .chat-input-container {
+      padding: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input-container input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .chat-input-container button {
+      background-color: #d15400;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .chat-input-container button:hover {
+      background-color: #c44300;
+    }
+  </style>
 </head>
 <body>
-<div>
-  <div>
-    <div>
-      <div>
-        <div>
-          <h3>Chat</h3>
-        </div>
-        <div>
-          <div id="chat-messages" style="height: 300px; overflow-y: auto;">
-            <div th:each="message : ${messages}">
-              <strong th:text="${message.getSender().getUsername()} + ': '">John Doe: </strong>
-              <span th:text="${message.getContent()}">Message</span>
-            </div>
-          </div>
-          <div>
-            <input type="text" id="message" placeholder="Type a message...">
-            <input type="hidden" id="username" th:value="${senderUsername}">
-            <input type="hidden" id="conversationId" th:value="${conversationId}">
-            <button onclick="sendMessage()">Send</button>
-          </div>
-        </div>
-      </div>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<div class="chat-container">
+
+  <div class="chat-header">
+    <h3>Chat</h3>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div th:each="message : ${messages}" class="message">
+      <strong th:text="${message.getSender().getUsername()} + ': '">John Doe: </strong>
+      <span th:text="${message.getContent()}">Message</span>
     </div>
+  </div>
+  <div class="chat-input-container">
+    <input type="text" id="message" placeholder="Type a message...">
+    <input type="hidden" id="username" th:value="${senderUsername}">
+    <input type="hidden" id="conversationId" th:value="${conversationId}">
+    <button onclick="sendMessage()">Send</button>
   </div>
 </div>
 
@@ -74,7 +148,7 @@
     const messageArea = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
 
-    messageElement.innerHTML = `<div>
+    messageElement.innerHTML = `<div class="message">
                     <strong>${message.sender}</strong>: ${message.content}
                 </div>`;
 

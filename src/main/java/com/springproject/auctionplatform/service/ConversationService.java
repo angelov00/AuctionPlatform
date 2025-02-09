@@ -1,10 +1,12 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.model.DTO.ConversationPreviewDTO;
 import com.springproject.auctionplatform.model.DTO.MessageDTO;
 import com.springproject.auctionplatform.model.entity.Conversation;
 import com.springproject.auctionplatform.model.entity.Message;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.repository.ConversationRepository;
+import com.springproject.auctionplatform.util.ModelMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,16 @@ public class ConversationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Conversation> getAllConversationsForUser(String username) {
-        return conversationRepository.findByUsername(username);
+    public List<ConversationPreviewDTO> getAllConversationsForUser(String username) {
+        return conversationRepository.findByUsername(username).stream().map(c -> ModelMapper.convertConversationToConversationPreviewDTO(c, username)).toList();
     }
 
-    public Conversation createConversation(Conversation conversation) {
-        return conversationRepository.save(conversation);
+    public Conversation createConversation(User seller, User buyer) {
+        Conversation conversation = new Conversation(seller, buyer);
+
+        conversationRepository.save(conversation);
+
+        return conversation;
     }
 
     public void createMessage(MessageDTO messageDTO) {
@@ -80,16 +86,20 @@ public class ConversationService {
         return recipient.getUsername();
     }
 
-    @Transactional(readOnly = true)
-    public Map<Long, List<String>> getParticipantsByConversationId(String username) {
-        List<Conversation> conversations = getAllConversationsForUser(username);
-
-        return conversations.stream()
-            .collect(Collectors.toMap(
-                Conversation::getId,
-                c -> getParticipantsUsernames(c.getId())
-            ));
+    public void updateConversation(Conversation conversation) {
+        conversationRepository.save(conversation);
     }
+
+//    @Transactional(readOnly = true)
+//    public Map<Long, String> getParticipantsByConversationId(String username) {
+//        List<Conversation> conversations = getAllConversationsForUser(username);
+//
+//        return conversations.stream()
+//            .collect(Collectors.toMap(
+//                Conversation::getId,
+//                c -> getParticipantsUsernames(c.getId())
+//            ));
+//    }
 
     private List<String> getParticipantsUsernames(long conversationId) {
         Conversation conversation = getConversationById(conversationId);

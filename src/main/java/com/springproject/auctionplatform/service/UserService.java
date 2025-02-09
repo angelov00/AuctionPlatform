@@ -103,6 +103,8 @@ public class UserService{
                 auction.getCategory(),
                 auction.getImageURLs().getFirst(),
                 auction.getCurrentPrice(),
+                auction.getSeller().getId(),
+                auction.getBuyer() == null ? -1 : auction.getBuyer().getId(),
                 auction.getStartingPrice())).toList();
     }
 

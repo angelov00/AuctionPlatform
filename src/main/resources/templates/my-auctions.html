@@ -16,6 +16,12 @@
         .btn-details {
             margin-left: 10px;
         }
+
+        .td-details {
+            display: flex;
+            gap : 4px;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +73,7 @@
             <td th:text="${auction.title}"></td>
             <td th:text="${auction.currentPrice ?: 'No Bids'}"></td>
             <td th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm')}"></td>
-            <td>
+            <td class="td-details">
                 <a th:href="@{/auction/details/{auctionId}(auctionId=${auction.id})}"
                    class="btn btn-info btn-sm btn-details">View Details</a>
                 <a th:href="@{/conversations}" class="btn btn-primary btn-sm">Contact Buyer</a>

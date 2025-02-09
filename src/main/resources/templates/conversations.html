@@ -30,6 +30,112 @@
       </tr>
     </table>
   </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversations</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            width: 70%;
+            margin: 50px auto;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .header {
+            background-color: #d15400;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .table-container {
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f5f5f5;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #d15400;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #c44300;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/menu :: menu}"></div>
+<div class="container">
+    <div class="header">
+        <h2>Conversations</h2>
+    </div>
+    <div class="table-container">
+        <div th:each="conversation : ${conversations}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Buyer</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${conversation.conversationTitle}">Auction 1</td>
+                    <td th:text="${conversation.buyerUsername}">Buyer Username</td>
+                    <td>
+                        <form th:action="@{/messages/{sender}/{convId}(sender=${senderUsername},convId=${conversation.conversationId})}" method="get">
+                            <button type="submit">Messages</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>

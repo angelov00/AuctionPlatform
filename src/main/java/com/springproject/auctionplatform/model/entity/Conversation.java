@@ -23,6 +23,9 @@ public class Conversation {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Auction auction;
+
     private LocalDateTime creationDate = LocalDateTime.now();
 
     @ManyToMany
@@ -31,11 +34,15 @@ public class Conversation {
             joinColumns = @JoinColumn(name = "conversation_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 2)
     private Set<User> participants = new HashSet<>();
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
     private List<Message> messages = new ArrayList<>();
+
+    public Conversation(User seller, User buyer) {
+        this.participants = Set.of(seller, buyer);
+    }
 
     public void addMessage(Message message) {
         messages.add(message);

@@ -29,5 +29,9 @@ public class AuctionPreviewDTO {
 
     private BigDecimal currentPrice;
 
+    private Long sellerId;
+
+    private Long buyerId;
+
     private BigDecimal startingPrice;
 }

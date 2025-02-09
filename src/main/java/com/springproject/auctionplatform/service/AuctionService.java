@@ -1,10 +1,7 @@
 package com.springproject.auctionplatform.service;
 
 import com.springproject.auctionplatform.model.DTO.*;
-import com.springproject.auctionplatform.model.entity.Auction;
-import com.springproject.auctionplatform.model.entity.Bid;
-import com.springproject.auctionplatform.model.entity.Promotion;
-import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.entity.*;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
 import com.springproject.auctionplatform.repository.AuctionRepository;
@@ -52,14 +49,16 @@ public class AuctionService {
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
     private final PromotionRepository promotionRepository;
+    private final ConversationService conversationService;
 
     @Autowired
-    public AuctionService(AuctionRepository auctionRepository, CloudinaryService cloudinaryService, UserRepository userRepository, BidRepository bidRepository, PromotionRepository promotionRepository) {
+    public AuctionService(AuctionRepository auctionRepository, CloudinaryService cloudinaryService, UserRepository userRepository, BidRepository bidRepository, PromotionRepository promotionRepository, ConversationService conversationService) {
         this.auctionRepository = auctionRepository;
         this.cloudinaryService = cloudinaryService;
         this.userRepository = userRepository;
         this.bidRepository = bidRepository;
         this.promotionRepository = promotionRepository;
+        this.conversationService = conversationService;
     }
 
     public Auction createAuction(AuctionAddDTO auctionAddDTO, String username) throws IOException {
@@ -91,6 +90,10 @@ public class AuctionService {
         for (Auction auction : ongoingAuctions) {
             if (auction.getEndTime().isBefore(now) || auction.getEndTime().isEqual(now)) {
                 auction.setStatus(AuctionStatus.WAITING_FOR_FINALIZATION);
+                Conversation conversation = conversationService.createConversation(auction.getSeller(), auction.getBuyer());
+                conversation.setAuction(auction);
+                conversationService.updateConversation(conversation);
+
                 auctionRepository.save(auction);
             }
         }
