@@ -1,5 +1,6 @@
 package com.springproject.auctionplatform.controller;
 
+import com.springproject.auctionplatform.model.DTO.AuctionResponseDTO;
 import com.springproject.auctionplatform.model.DTO.MessageDTO;
 import com.springproject.auctionplatform.model.entity.Message;
 import com.springproject.auctionplatform.service.ConversationService;
@@ -35,9 +36,11 @@ public class ChatController {
         messagingTemplate.convertAndSendToUser(userURI, "/queue/messages", messageDTO);
     }
 
-    @GetMapping("/messages/{senderUsername}/{conversationId}")
+    @GetMapping("/messages/{senderUsername}/{auctionId}/{conversationId}/{completed}")
     public String getChatMessages(@PathVariable("senderUsername") String senderUsername,
+                                  @PathVariable("auctionId") long auctionId,
                                   @PathVariable("conversationId") long conversationId,
+                                  @PathVariable("completed") String completed,
                                   Model model) {
         List<Message> messages = conversationService.getAllMessagesForConversation(conversationId);
 
@@ -46,8 +49,9 @@ public class ChatController {
         model.addAttribute("messages", messages);
         model.addAttribute("sender", senderUsername);
         model.addAttribute("conversationId", conversationId);
+        model.addAttribute("completed", completed.equals("true"));
+        model.addAttribute("responseDTO", new AuctionResponseDTO(senderUsername, auctionId));
 
         return "chat";
     }
-
 }

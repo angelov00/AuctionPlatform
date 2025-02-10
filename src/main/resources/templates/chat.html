@@ -103,6 +103,21 @@
     <input type="hidden" id="username" th:value="${senderUsername}">
     <input type="hidden" id="conversationId" th:value="${conversationId}">
     <button onclick="sendMessage()">Send</button>
+    <div th:if="${completed} == false" id="response-buttons">
+      <form method="post" th:action="@{'/conversations/' + ${conversationId} + '/respond'}" th:object="${responseDTO}">
+        <input type="hidden" th:field="*{senderUsername}">
+        <input type="hidden" th:field="*{auctionId}">
+        <input type="hidden" name="responseStatus" value="ACCEPT">
+        <button type="submit" onclick="update()">Accept</button>
+      </form>
+
+      <form method="post" th:action="@{'/conversations/' + ${conversationId} + '/respond'}" th:object="${responseDTO}">
+        <input type="hidden" th:field="*{senderUsername}">
+        <input type="hidden" th:field="*{auctionId}">
+        <input type="hidden" name="responseStatus" value="DECLINE">
+        <button type="submit" onclick="update()">Decline</button>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -171,6 +186,10 @@
     if (stompClient) {
       stompClient.disconnect();
     }
+  }
+
+  function update() {
+    document.getElementById("response-buttons").style.display = "none";
   }
 </script>
 </body>
