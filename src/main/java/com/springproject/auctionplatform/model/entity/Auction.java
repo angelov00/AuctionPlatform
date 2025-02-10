@@ -34,6 +34,9 @@ public class Auction {
     @Column(nullable = false)
     private LocalDateTime endTime;
 
+    @Column(nullable = true)
+    private LocalDateTime completionTime;
+
     @Column(length = 1000)
     private String description;
 

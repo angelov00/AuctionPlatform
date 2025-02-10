@@ -21,6 +21,8 @@ public class AuctionPreviewDTO {
 
     private LocalDateTime endTime;
 
+    private LocalDateTime completionTime;
+
     private String description;
 
     private AuctionCategory category;
@@ -28,6 +30,10 @@ public class AuctionPreviewDTO {
     private String mainPhotoURL;
 
     private BigDecimal currentPrice;
+
+    private Long sellerId;
+
+    private Long buyerId;
 
     private BigDecimal startingPrice;
 }

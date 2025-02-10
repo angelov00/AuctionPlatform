@@ -57,12 +57,10 @@ public class UserService{
         userRepository.save(user);
     }
 
-    // TODO create UserUpdateDTO ?
     public User updateUser(User user) {
         User existing = getUserById(user.getId());
 
         if (!user.getId().equals(existing.getId())) {
-            // TODO create custom exception
             throw new RuntimeException(String.format("User with username %s could not be updated", user.getUsername()));
         }
 
@@ -99,10 +97,13 @@ public class UserService{
                 auction.getId(),
                 auction.getTitle(),
                 auction.getEndTime(),
+                auction.getCompletionTime(),
                 auction.getDescription(),
                 auction.getCategory(),
                 auction.getImageURLs().getFirst(),
                 auction.getCurrentPrice(),
+                auction.getSeller().getId(),
+                auction.getBuyer() == null ? -1 : auction.getBuyer().getId(),
                 auction.getStartingPrice())).toList();
     }
 

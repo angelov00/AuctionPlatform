@@ -1,10 +1,7 @@
 package com.springproject.auctionplatform.service;
 
 import com.springproject.auctionplatform.model.DTO.*;
-import com.springproject.auctionplatform.model.entity.Auction;
-import com.springproject.auctionplatform.model.entity.Bid;
-import com.springproject.auctionplatform.model.entity.Promotion;
-import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.entity.*;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
 import com.springproject.auctionplatform.repository.AuctionRepository;
@@ -33,6 +30,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +38,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 public class AuctionService {
 
@@ -52,14 +51,16 @@ public class AuctionService {
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
     private final PromotionRepository promotionRepository;
+    private final ConversationService conversationService;
 
     @Autowired
-    public AuctionService(AuctionRepository auctionRepository, CloudinaryService cloudinaryService, UserRepository userRepository, BidRepository bidRepository, PromotionRepository promotionRepository) {
+    public AuctionService(AuctionRepository auctionRepository, CloudinaryService cloudinaryService, UserRepository userRepository, BidRepository bidRepository, PromotionRepository promotionRepository, ConversationService conversationService) {
         this.auctionRepository = auctionRepository;
         this.cloudinaryService = cloudinaryService;
         this.userRepository = userRepository;
         this.bidRepository = bidRepository;
         this.promotionRepository = promotionRepository;
+        this.conversationService = conversationService;
     }
 
     public Auction createAuction(AuctionAddDTO auctionAddDTO, String username) throws IOException {
@@ -91,6 +92,19 @@ public class AuctionService {
         for (Auction auction : ongoingAuctions) {
             if (auction.getEndTime().isBefore(now) || auction.getEndTime().isEqual(now)) {
                 auction.setStatus(AuctionStatus.WAITING_FOR_FINALIZATION);
+                Optional<User> highestBidder = bidRepository.findByAuctionId(auction.getId()).stream()
+                    .max(Comparator.comparing(Bid::getAmount)).map(
+                    Bid::getUser);
+
+                if (highestBidder.isPresent()) {
+                    Conversation conversation = conversationService
+                        .createConversation(auction.getSeller(), highestBidder.get());
+                    conversation.setAuction(auction);
+                    conversationService.updateConversation(conversation);
+                } else {
+                    auction.setStatus(AuctionStatus.CANCELLED);
+                }
+
                 auctionRepository.save(auction);
             }
         }

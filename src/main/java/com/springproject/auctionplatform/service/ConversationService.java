@@ -1,17 +1,25 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.model.DTO.ConversationPreviewDTO;
 import com.springproject.auctionplatform.model.DTO.MessageDTO;
+import com.springproject.auctionplatform.model.entity.Auction;
+import com.springproject.auctionplatform.model.entity.AuctionResponse;
 import com.springproject.auctionplatform.model.entity.Conversation;
 import com.springproject.auctionplatform.model.entity.Message;
 import com.springproject.auctionplatform.model.entity.User;
+import com.springproject.auctionplatform.model.enums.AuctionStatus;
+import com.springproject.auctionplatform.model.enums.ResponseStatus;
+import com.springproject.auctionplatform.repository.AuctionRepository;
+import com.springproject.auctionplatform.repository.AuctionResponseRepository;
 import com.springproject.auctionplatform.repository.ConversationRepository;
+import com.springproject.auctionplatform.util.ModelMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -19,11 +27,15 @@ import java.util.stream.Collectors;
 public class ConversationService {
     private final ConversationRepository conversationRepository;
     private final UserService userService;
+    private final AuctionResponseRepository auctionResponseRepository;
+    private final AuctionRepository auctionRepository;
 
     @Autowired
-    public ConversationService(ConversationRepository conversationRepository, UserService userService) {
+    public ConversationService(ConversationRepository conversationRepository, UserService userService, AuctionResponseRepository auctionResponseRepository, AuctionRepository auctionRepository) {
         this.conversationRepository = conversationRepository;
         this.userService = userService;
+        this.auctionResponseRepository = auctionResponseRepository;
+        this.auctionRepository = auctionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -33,12 +45,16 @@ public class ConversationService {
     }
 
     @Transactional(readOnly = true)
-    public List<Conversation> getAllConversationsForUser(String username) {
-        return conversationRepository.findByUsername(username);
+    public List<ConversationPreviewDTO> getAllConversationsForUser(String username) {
+        return conversationRepository.findByUsername(username).stream().map(c -> ModelMapper.convertConversationToConversationPreviewDTO(c, username)).toList();
     }
 
-    public Conversation createConversation(Conversation conversation) {
-        return conversationRepository.save(conversation);
+    public Conversation createConversation(User seller, User buyer) {
+        Conversation conversation = new Conversation(seller, buyer);
+
+        conversationRepository.save(conversation);
+
+        return conversation;
     }
 
     public void createMessage(MessageDTO messageDTO) {
@@ -80,15 +96,41 @@ public class ConversationService {
         return recipient.getUsername();
     }
 
-    @Transactional(readOnly = true)
-    public Map<Long, List<String>> getParticipantsByConversationId(String username) {
-        List<Conversation> conversations = getAllConversationsForUser(username);
+    public void updateConversation(Conversation conversation) {
+        conversationRepository.save(conversation);
+    }
 
-        return conversations.stream()
-            .collect(Collectors.toMap(
-                Conversation::getId,
-                c -> getParticipantsUsernames(c.getId())
-            ));
+    public void submitResponse(String senderUsername, ResponseStatus responseStatus, Long auctionId, Long conversationId) {
+        Auction auction = auctionRepository.findById(auctionId)
+            .orElseThrow(() -> new RuntimeException("Auction not found"));
+        User user = userService.getUserByUsername(senderUsername);
+        Conversation conversation = getConversationById(conversationId);
+
+        AuctionResponse response = auctionResponseRepository
+            .findByConversationIdAndUserUsername(conversationId, senderUsername)
+            .orElse(new AuctionResponse());
+
+        response.setConversation(conversation);
+        response.setUser(user);
+        response.setResponse(responseStatus);
+        auctionResponseRepository.save(response);
+
+        List<AuctionResponse> responses = auctionResponseRepository.findByConversationId(conversationId);
+        boolean bothAccepted = responses.size() == 2 &&
+            responses.stream().allMatch(r -> r.getResponse() == ResponseStatus.ACCEPT);
+        boolean someoneDeclined = responses.size() == 2 &&
+            responses.stream().anyMatch(r -> r.getResponse() == ResponseStatus.DECLINE);
+
+        if (bothAccepted) {
+            auction.setStatus(AuctionStatus.COMPLETED);
+            auction.setBuyer(responses.stream().filter(r -> !r.getUser().getId().equals(auction.getSeller().getId())).peek(u -> System.out.println(u.getId())).findFirst().get()
+                .getUser());
+            auction.setCompletionTime(LocalDateTime.now());
+        } else if (someoneDeclined) {
+            auction.setStatus(AuctionStatus.CANCELLED);
+        }
+
+        auctionRepository.save(auction);
     }
 
     private List<String> getParticipantsUsernames(long conversationId) {
