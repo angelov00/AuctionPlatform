@@ -1,5 +1,6 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.exception.ResourceNotFoundException;
 import com.springproject.auctionplatform.model.DTO.PromotionDTO;
 import com.springproject.auctionplatform.model.entity.Promotion;
 import com.springproject.auctionplatform.model.entity.User;
@@ -31,7 +32,7 @@ public class PromotionService {
 
         if(promotion.isPresent()) {
             return ModelMapper.convertPromotionToPromotionDTO(promotion.get());
-        } else throw new IllegalArgumentException("Promotion not found");
+        } else throw new ResourceNotFoundException("Promotion not found");
 
     }
 

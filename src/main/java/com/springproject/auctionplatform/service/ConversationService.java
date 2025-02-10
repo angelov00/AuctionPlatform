@@ -1,5 +1,6 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.exception.ResourceNotFoundException;
 import com.springproject.auctionplatform.model.DTO.ConversationPreviewDTO;
 import com.springproject.auctionplatform.model.DTO.MessageDTO;
 import com.springproject.auctionplatform.model.entity.Auction;
@@ -102,7 +103,7 @@ public class ConversationService {
 
     public void submitResponse(String senderUsername, ResponseStatus responseStatus, Long auctionId, Long conversationId) {
         Auction auction = auctionRepository.findById(auctionId)
-            .orElseThrow(() -> new RuntimeException("Auction not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Auction not found"));
         User user = userService.getUserByUsername(senderUsername);
         Conversation conversation = getConversationById(conversationId);
 

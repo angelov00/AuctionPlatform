@@ -1,5 +1,6 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.exception.ResourceNotFoundException;
 import com.springproject.auctionplatform.model.DTO.*;
 import com.springproject.auctionplatform.model.entity.*;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
@@ -123,7 +124,7 @@ public class AuctionService {
 
     public Auction getAuctionById(Long id) {
         return auctionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Auction not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Auction not found."));
     }
 
     public List<BidDetailsDTO> getBidsForAuction(Long auctionId) {
@@ -136,7 +137,7 @@ public class AuctionService {
         Auction auction = getAuctionById(auctionId);
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
         if (Objects.equals(user.getId(), auction.getSeller().getId())) {
             throw new IllegalArgumentException("You cannot place a bid on your own auction!");
@@ -232,7 +233,7 @@ public class AuctionService {
             promotion.setDuration(promotionDuration);
             this.promotionRepository.save(promotion);
         } else {
-            throw new IllegalArgumentException("Auction not found!");
+            throw new ResourceNotFoundException("Auction not found!");
         }
 
         return promotion;
