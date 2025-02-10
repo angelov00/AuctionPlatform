@@ -10,6 +10,7 @@ public class ModelMapper {
                 auction.getId(),
                 auction.getTitle(),
                 auction.getEndTime(),
+                auction.getCompletionTime(),
                 auction.getDescription(),
                 auction.getCategory(),
                 auction.getImageURLs().getFirst(),
