@@ -21,6 +21,8 @@ public class AuctionPreviewDTO {
 
     private LocalDateTime endTime;
 
+    private LocalDateTime completionTime;
+
     private String description;
 
     private AuctionCategory category;
