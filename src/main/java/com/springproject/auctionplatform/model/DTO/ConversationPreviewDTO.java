@@ -10,7 +10,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConversationPreviewDTO {
+
     private Long conversationId;
+
     private String conversationTitle;
-    private String buyerUsername;
+
+    private String highestBidderUsername;
+
+    private Long auctionId;
+
+    private boolean completed;
+
 }

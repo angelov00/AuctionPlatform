@@ -90,9 +90,18 @@ public class AuctionService {
         for (Auction auction : ongoingAuctions) {
             if (auction.getEndTime().isBefore(now) || auction.getEndTime().isEqual(now)) {
                 auction.setStatus(AuctionStatus.WAITING_FOR_FINALIZATION);
-                Conversation conversation = conversationService.createConversation(auction.getSeller(), auction.getBuyer());
-                conversation.setAuction(auction);
-                conversationService.updateConversation(conversation);
+                Optional<User> highestBidder = bidRepository.findByAuctionId(auction.getId()).stream()
+                    .max(Comparator.comparing(Bid::getAmount)).map(
+                    Bid::getUser);
+
+                if (highestBidder.isPresent()) {
+                    Conversation conversation = conversationService
+                        .createConversation(auction.getSeller(), highestBidder.get());
+                    conversation.setAuction(auction);
+                    conversationService.updateConversation(conversation);
+                } else {
+                    auction.setStatus(AuctionStatus.CANCELLED);
+                }
 
                 auctionRepository.save(auction);
             }

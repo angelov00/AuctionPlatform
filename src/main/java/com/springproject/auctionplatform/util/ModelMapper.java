@@ -2,6 +2,7 @@ package com.springproject.auctionplatform.util;
 
 import com.springproject.auctionplatform.model.DTO.*;
 import com.springproject.auctionplatform.model.entity.*;
+import com.springproject.auctionplatform.model.enums.AuctionStatus;
 
 public class ModelMapper {
 
@@ -25,7 +26,9 @@ public class ModelMapper {
         return new ConversationPreviewDTO(
                 conversation.getId(),
                 conversation.getAuction().getTitle(),
-                conversation.getParticipants().stream().map(User::getUsername).filter(u -> !u.equals(username)).findFirst().get()
+                conversation.getParticipants().stream().map(User::getUsername).filter(u -> !u.equals(username)).findFirst().get(),
+                conversation.getAuction().getId(),
+                conversation.getAuction().getStatus().equals(AuctionStatus.COMPLETED)
         );
     }
 

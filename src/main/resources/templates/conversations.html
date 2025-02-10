@@ -2,36 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Conversations</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-<div>
-  <div th:replace="~{fragments/menu :: menu}"></div>
-
-  <h2>Conversations: </h2>
-  <!--/*@thymesVar id="getKey" type="com.springproject.auctionplatform.model.entity.Conversation"*/-->
-  <!--/*@thymesVar id="getValue" type="java.util.List"*/-->
-  <div th:each="entry: ${participantsByConversationId}" th:with="conversationId=${entry.getKey()}, participants=${entry.getValue()}">
-    <table>
-      <tr>
-        <th>Chat</th>
-        <th>Participants</th>
-<!--        <th>Messages</th>-->
-      </tr>
-      <tr>
-        <th th:text="${conversationId}">Conversation name</th>
-        <th th:text="${#strings.listJoin(participants, ',')}">Participants</th>
-<!--        <th>-->
-<!--          <form th:action="@{/messages/{senderUsername}/{conversationId}}" method="get" >-->
-<!--            <button type="submit">Messages</button>-->
-<!--          </form>-->
-<!--        </th>-->
-      </tr>
-    </table>
-  </div>
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversations</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -118,16 +88,16 @@
                 <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Buyer</th>
+                    <th>Highest Bidder</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td th:text="${conversation.conversationTitle}">Auction 1</td>
-                    <td th:text="${conversation.buyerUsername}">Buyer Username</td>
+                    <td th:text="${conversation.highestBidderUsername}">Highest Bidder Username</td>
                     <td>
-                        <form th:action="@{/messages/{sender}/{convId}(sender=${senderUsername},convId=${conversation.conversationId})}" method="get">
+                        <form th:action="@{/messages/{sender}/{auctId}/{convId}/{completed}(sender=${senderUsername},auctId=${conversation.auctionId},convId=${conversation.conversationId},completed=${conversation.completed})}" method="get">
                             <button type="submit">Messages</button>
                         </form>
                     </td>

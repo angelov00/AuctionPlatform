@@ -41,7 +41,7 @@ public class Conversation {
     private List<Message> messages = new ArrayList<>();
 
     public Conversation(User seller, User buyer) {
-        this.participants = Set.of(seller, buyer);
+        this.participants = new HashSet<>(Set.of(seller, buyer));
     }
 
     public void addMessage(Message message) {
