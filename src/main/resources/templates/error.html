@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .error-header {
+            background-color: #ff6600;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .error-container {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .error-details p {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+        }
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #ff6600;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="error-header">
+    <h1>Error Occurred</h1>
+</div>
+<div class="error-container">
+    <div class="error-details">
+        <h2>Error Details</h2>
+        <p>Error Code: <span th:text="${errorCode}">500</span></p>
+        <p>Message: <span th:text="${errorMessage}">Unexpected Error</span></p>
+        <p>Details: <span th:text="${errorDetails}">Error Description</span></p>
+    </div>
+    <a th:href="@{/home}" class="home-link">Return to Home</a>
+</div>
+</body>
+</html>

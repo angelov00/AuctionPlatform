@@ -1,5 +1,6 @@
 package com.springproject.auctionplatform.service;
 
+import com.springproject.auctionplatform.exception.ResourceNotFoundException;
 import com.springproject.auctionplatform.model.DTO.AuctionPreviewDTO;
 import com.springproject.auctionplatform.model.DTO.UserRegisterDTO;
 import com.springproject.auctionplatform.model.DTO.UserUpdateDTO;
@@ -9,7 +10,6 @@ import com.springproject.auctionplatform.model.enums.Role;
 import com.springproject.auctionplatform.repository.AuctionRepository;
 import com.springproject.auctionplatform.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,13 @@ public class UserService{
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-            .orElseThrow(() -> new EntityNotFoundException(String.format("Username %s not found", username)));
+            .orElseThrow(() -> new ResourceNotFoundException(String.format("Username %s not found", username)));
     }
 
     @Transactional(readOnly = true)
     public User getUserById(long id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s not found", id)));
+            .orElseThrow(() -> new ResourceNotFoundException(String.format("User with id %s not found", id)));
     }
 
     public void createUser(UserRegisterDTO registerDTO) {
@@ -77,7 +77,7 @@ public class UserService{
 
     public void addToWatchlist(User user, Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new IllegalArgumentException("Auction not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Auction not found"));
 
         user.getWatchlist().add(auction);
         userRepository.save(user);
@@ -85,7 +85,7 @@ public class UserService{
 
     public Auction removeFromWatchlist(User user, Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new IllegalArgumentException("Auction not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Auction not found"));
 
         user.getWatchlist().remove(auction);
         userRepository.save(user);
