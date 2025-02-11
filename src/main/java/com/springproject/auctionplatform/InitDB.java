@@ -1,12 +1,14 @@
 package com.springproject.auctionplatform;
 
 import com.springproject.auctionplatform.model.entity.Auction;
+import com.springproject.auctionplatform.model.entity.Bid;
 import com.springproject.auctionplatform.model.entity.Promotion;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
 import com.springproject.auctionplatform.repository.AuctionRepository;
+import com.springproject.auctionplatform.repository.BidRepository;
 import com.springproject.auctionplatform.repository.PromotionRepository;
 import com.springproject.auctionplatform.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
@@ -23,13 +25,16 @@ public class InitDB {
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
     private final PromotionRepository promotionRepository;
+    private final BidRepository bidRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public InitDB(UserRepository userRepository, AuctionRepository auctionRepository, PromotionRepository promotionRepository, PasswordEncoder passwordEncoder) {
+    public InitDB(UserRepository userRepository, AuctionRepository auctionRepository,
+                  PromotionRepository promotionRepository, BidRepository bidRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.auctionRepository = auctionRepository;
         this.promotionRepository = promotionRepository;
+        this.bidRepository = bidRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -182,9 +187,41 @@ public class InitDB {
             auction8.setPromoted(false);
             this.auctionRepository.save(auction8);
 
+            Auction auction9 = new Auction();
+            auction9.setTitle("Vintage Camera");
+            auction9.setStartTime(LocalDateTime.now());
+            auction9.setEndTime(LocalDateTime.now().plusMinutes(2));
+            auction9.setDescription("Classic Polaroid camera, fully functional and in excellent condition.");
+            auction9.setStatus(AuctionStatus.ONGOING);
+            auction9.setCategory(AuctionCategory.COLLECTIBLES);
+            auction9.getImageURLs().add("https://filmcamerastore.co.uk/cdn/shop/files/polaroid-supercolour-600-instant-film-camera-1.jpg?v=1689264754&width=1406");
+            auction9.setStartingPrice(BigDecimal.valueOf(100L));
+            auction9.setCurrentPrice(auction9.getStartingPrice());
+            auction9.setSeller(user2);
+            auction9.setPromoted(false);
+            this.auctionRepository.save(auction9);
 
+            Bid bid1 = new Bid();
+            bid1.setAmount(BigDecimal.valueOf(110L));
+            bid1.setUser(user);
+            bid1.setAuction(auction9);
+            bid1.setTime(LocalDateTime.now());
+            this.bidRepository.save(bid1);
+
+            Auction auction10 = new Auction();
+            auction10.setTitle("Hand-Knitted Wool Scarf");
+            auction10.setStartTime(LocalDateTime.now());
+            auction10.setEndTime(LocalDateTime.now().plusMinutes(2));
+            auction10.setDescription("Beautifully hand-knitted scarf, made with 100% merino wool.  Perfect for staying warm in style.");
+            auction10.setStatus(AuctionStatus.ONGOING);
+            auction10.setCategory(AuctionCategory.FASHION);
+            auction10.getImageURLs().add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBA_fpXVa2rQ6t0SlMT5BK8R_Ec2mWbj6eJw&s");
+            auction10.setStartingPrice(BigDecimal.valueOf(30L));
+            auction10.setCurrentPrice(auction10.getStartingPrice());
+            auction10.setSeller(user2);
+            auction10.setPromoted(false);
+            this.auctionRepository.save(auction10);
         }
-
 
     }
 
