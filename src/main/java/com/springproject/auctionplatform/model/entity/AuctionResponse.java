@@ -17,6 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuctionResponse {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,4 +30,5 @@ public class AuctionResponse {
 
     @Enumerated(EnumType.STRING)
     private ResponseStatus response;
+
 }

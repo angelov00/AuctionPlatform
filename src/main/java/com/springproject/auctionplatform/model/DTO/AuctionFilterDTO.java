@@ -15,8 +15,11 @@ import java.math.BigDecimal;
 public class AuctionFilterDTO {
 
     private AuctionCategory auctionCategory;
+
     private BigDecimal currentPriceGreaterThan;
+
     private BigDecimal currentPriceLessThan;
+
     private String titleSearch;
 
 }

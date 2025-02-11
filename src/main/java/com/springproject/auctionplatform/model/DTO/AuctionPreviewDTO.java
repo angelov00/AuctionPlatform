@@ -36,4 +36,5 @@ public class AuctionPreviewDTO {
     private Long buyerId;
 
     private BigDecimal startingPrice;
+
 }

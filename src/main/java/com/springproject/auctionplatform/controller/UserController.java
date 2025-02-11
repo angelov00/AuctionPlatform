@@ -96,5 +96,4 @@ public class UserController {
         return "redirect:/users/watchlist";
     }
 
-
 }

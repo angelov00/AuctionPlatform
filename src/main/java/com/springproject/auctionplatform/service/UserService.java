@@ -57,16 +57,6 @@ public class UserService{
         userRepository.save(user);
     }
 
-    public User updateUser(User user) {
-        User existing = getUserById(user.getId());
-
-        if (!user.getId().equals(existing.getId())) {
-            throw new RuntimeException(String.format("User with username %s could not be updated", user.getUsername()));
-        }
-
-        return userRepository.save(user);
-    }
-
     public User deleteUser(long id) {
         User existing = getUserById(id);
 

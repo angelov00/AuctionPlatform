@@ -1,9 +1,7 @@
 package com.springproject.auctionplatform.model.DTO;
 
-import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,4 +47,5 @@ public class AuctionDetailsDTO {
     private LocalDateTime promotionEndTime = null;
 
     private UserDetailsDTO buyer;
+
 }
