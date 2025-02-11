@@ -22,13 +22,14 @@ public class PromotionDTO {
 
     private BigDecimal amount;
 
+    private LocalDateTime promotionDate;
+
     private int duration;
 
     private PaymentMethod paymentMethod;
 
-    private UserDetailsDTO user;
-
     private AuctionPreviewDTO auction;
 
-    private LocalDateTime promotionDate;
+    private UserDetailsDTO user;
+
 }
