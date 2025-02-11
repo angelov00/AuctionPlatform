@@ -60,7 +60,7 @@ public class InitDB {
             Auction auction = new Auction();
             auction.setTitle("An old watch");
             auction.setStartTime(LocalDateTime.now());
-            auction.setEndTime(LocalDateTime.now().plusDays(15));
+            auction.setEndTime(LocalDateTime.now().plusMinutes(5));
             auction.setDescription("An old watch in very good condition. Mechanical");;
             auction.setStatus(AuctionStatus.ONGOING);
             auction.setCategory(AuctionCategory.JEWELRY);

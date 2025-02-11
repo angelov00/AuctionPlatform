@@ -46,12 +46,15 @@ public class AuctionController {
             @RequestParam(value = "size", defaultValue = "6") int size,
             Model model) {
 
-        int currentPromotionPage = (page * PROMOTED_PER_PAGE) % (int) this.auctionService.getPromotedAuctionsCount();
+        long promotedAuctionsCount = this.auctionService.getPromotedAuctionsCount();
 
-        Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(currentPromotionPage, PROMOTED_PER_PAGE);
+        if(promotedAuctionsCount > 0) {
+            int currentPromotionPage = page * PROMOTED_PER_PAGE % (int) this.auctionService.getPromotedAuctionsCount();
+            Page<AuctionPreviewDTO> pagedPromotedAuctions = auctionService.getPromotedAuctions(currentPromotionPage, PROMOTED_PER_PAGE);
+            model.addAttribute("promotedAuctions", pagedPromotedAuctions);
+        }
+
         Page<AuctionPreviewDTO> pagedRegularAuctions = auctionService.getRegularAuctions(filter, page, size);
-
-        model.addAttribute("promotedAuctions", pagedPromotedAuctions);
         model.addAttribute("regularAuctions", pagedRegularAuctions);
         model.addAttribute("categories", AuctionCategory.values());
         model.addAttribute("filter", filter);

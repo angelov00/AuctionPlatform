@@ -36,4 +36,7 @@ public class UserDetailsDTO {
 
     private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 
+    public String getFullname() {
+        return firstName + " " + lastName;
+    }
 }

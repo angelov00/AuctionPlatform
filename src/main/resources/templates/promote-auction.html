@@ -17,7 +17,7 @@
         <h3>Title: <span th:text="${auction.title}"></span></h3>
         <p>Description: <span th:text="${auction.description}"></span></p>
         <p>Starting Price: <span th:text="${auction.startingPrice}"></span></p>
-        <p>End Time: <span th:text="${auction.endTime}"></span></p>
+        <p>End Time: <span th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm')}"></span></p>
     </div>
 
     <!-- Promotion Price -->

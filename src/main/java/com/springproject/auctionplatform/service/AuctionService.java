@@ -216,28 +216,31 @@ public class AuctionService {
     }
 
     public Promotion promoteAuction(Long auctionId, PaymentMethod paymentMethod, int promotionDuration) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new IllegalArgumentException("Auction not found."));
 
-        Optional<Auction> auction = this.auctionRepository.findById(auctionId);
-        Promotion promotion = new Promotion();
-
-        if(auction.isPresent()) {
-            auction.get().setPromoted(true);
-            auction.get().setPromotedAt(LocalDateTime.now());
-            auction.get().setPromotionEndTime(LocalDateTime.now().plusDays(promotionDuration));
-            auctionRepository.saveAndFlush(auction.get());
-            promotion.setPromotionDate(LocalDateTime.now());
-            promotion.setAmount(PROMOTION_COST_PER_DAY.multiply(BigDecimal.valueOf(promotionDuration)));
-            promotion.setPaymentMethod(paymentMethod);
-            promotion.setAuction(auction.get());
-            promotion.setUser(auction.get().getSeller());
-            promotion.setDuration(promotionDuration);
-            this.promotionRepository.save(promotion);
-        } else {
-            throw new ResourceNotFoundException("Auction not found!");
+        if (auction.getStartTime().plusDays(promotionDuration).isAfter(auction.getEndTime())) {
+            throw new IllegalArgumentException("Promotion duration should be less or equal to auction duration.");
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        auction.setPromoted(true);
+        auction.setPromotedAt(now);
+        auction.setPromotionEndTime(now.plusDays(promotionDuration));
+        auctionRepository.saveAndFlush(auction);
+
+        Promotion promotion = new Promotion();
+        promotion.setPromotionDate(now);
+        promotion.setAmount(PROMOTION_COST_PER_DAY.multiply(BigDecimal.valueOf(promotionDuration)));
+        promotion.setPaymentMethod(paymentMethod);
+        promotion.setAuction(auction);
+        promotion.setUser(auction.getSeller());
+        promotion.setDuration(promotionDuration);
+
+        promotionRepository.save(promotion);
         return promotion;
     }
+
 
     public List<AuctionPreviewDTO> getAuctionsBySellerAndStatus(String username, AuctionStatus status) {
         return auctionRepository.findAllBySellerUsernameAndStatus(username, status).stream().map(ModelMapper::convertAuctionToAuctionPreviewDTO).collect(Collectors.toList());
