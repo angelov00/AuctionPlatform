@@ -12,4 +12,5 @@ public class MessageDTO {
     private String sender;
 
     private long conversationId;
+
 }

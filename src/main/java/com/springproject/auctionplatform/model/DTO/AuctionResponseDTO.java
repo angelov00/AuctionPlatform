@@ -20,4 +20,5 @@ public class AuctionResponseDTO {
         this.senderUsername = senderUsername;
         this.auctionId = auctionId;
     }
+
 }
