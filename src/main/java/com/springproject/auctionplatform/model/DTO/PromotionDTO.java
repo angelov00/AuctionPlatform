@@ -31,4 +31,5 @@ public class PromotionDTO {
     private AuctionPreviewDTO auction;
 
     private UserDetailsDTO user;
+
 }

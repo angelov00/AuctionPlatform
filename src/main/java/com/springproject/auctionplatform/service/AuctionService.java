@@ -77,10 +77,8 @@ public class AuctionService {
         auction.setStartingPrice(auctionAddDTO.getStartingPrice());
         auction.setCurrentPrice(auctionAddDTO.getStartingPrice());
         auction.setImageURLs(imageUrls);
-        auction.setStatus(AuctionStatus.UPCOMING);
-        auction.setSeller(userRepository.findByUsername(username).get());
-
         auction.setStatus(AuctionStatus.ONGOING);
+        auction.setSeller(userRepository.findByUsername(username).get());
 
         return auctionRepository.save(auction);
     }
@@ -92,6 +90,7 @@ public class AuctionService {
         List<Auction> ongoingAuctions = auctionRepository.findByStatus(AuctionStatus.ONGOING);
         for (Auction auction : ongoingAuctions) {
             if (auction.getEndTime().isBefore(now) || auction.getEndTime().isEqual(now)) {
+
                 auction.setStatus(AuctionStatus.WAITING_FOR_FINALIZATION);
                 Optional<User> highestBidder = bidRepository.findByAuctionId(auction.getId()).stream()
                     .max(Comparator.comparing(Bid::getAmount)).map(

@@ -145,7 +145,6 @@ public class AuctionController {
 
     }
 
-
     @PostMapping("/promote/{id}")
     public String promoteAuction(@PathVariable Long id,
                                  @RequestParam("paymentMethod") PaymentMethod paymentMethod,
@@ -170,9 +169,5 @@ public class AuctionController {
         model.addAttribute("promotion", promotion);
         return "promotion-success";
     }
-
-
-
-
 
 }
