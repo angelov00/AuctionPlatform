@@ -20,7 +20,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(configurer ->
                 configurer
-                    .requestMatchers("/auth/register", "/home", "/").permitAll()
+                    .requestMatchers("/auth/register", "/home", "/", "/auction", "/auction/details/**").permitAll()
                     .anyRequest().authenticated())
             .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form

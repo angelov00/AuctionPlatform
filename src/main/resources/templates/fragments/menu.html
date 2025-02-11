@@ -108,6 +108,11 @@
                             </form>
                         </li>
                         <li class="nav-item">
+                            <form th:action="@{/auction}" method="get">
+                                <button type="submit" class="btn btn-link text-white nav-link">Browse Auctions</button>
+                            </form>
+                        </li>
+                        <li class="nav-item">
                             <form th:action="@{/auth/login}" method="get">
                                 <button type="submit" class="btn nav-link">Login</button>
                             </form>
