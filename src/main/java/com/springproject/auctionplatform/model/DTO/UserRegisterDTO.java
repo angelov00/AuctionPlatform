@@ -33,7 +33,7 @@ public class UserRegisterDTO {
     @Pattern(regexp = "^\\+?[0-9. ()-]{7,}$", message = "Invalid phone number!")
     private String phone;
 
-    @NotNull(message = "Preferred categories are required")
-    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
+//    @NotNull(message = "Preferred categories are required")
+//    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 }
 

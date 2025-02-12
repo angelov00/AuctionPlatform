@@ -49,7 +49,7 @@ public class InitDB {
             user.setLastName("Smith");
             user.setEmail("john.smith@gmail.com");
             user.setPhone("0888888888");
-            user.getPreferredCategories().add(AuctionCategory.ART);
+            //user.getPreferredCategories().add(AuctionCategory.ART);
             this.userRepository.save(user);
 
             User user2 = new User();
@@ -59,7 +59,7 @@ public class InitDB {
             user2.setLastName("Smith");
             user2.setEmail("jane.smith@gmail.com");
             user2.setPhone("0777777777");
-            user2.getPreferredCategories().add(AuctionCategory.JEWELRY);
+            //user2.getPreferredCategories().add(AuctionCategory.JEWELRY);
             this.userRepository.save(user2);
 
             Auction auction = new Auction();

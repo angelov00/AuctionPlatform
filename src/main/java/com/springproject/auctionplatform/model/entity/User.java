@@ -44,9 +44,9 @@ public class User {
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = AuctionCategory.class, fetch = FetchType.LAZY)
-    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
+//    @Enumerated(EnumType.STRING)
+//    @ElementCollection(targetClass = AuctionCategory.class, fetch = FetchType.LAZY)
+//    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 
     @ManyToMany
     @JoinTable(

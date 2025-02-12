@@ -176,6 +176,7 @@ public class AuctionService {
 
         Specification<Auction> specification = createSpecification(filter);
         Page<Auction> auctions = auctionRepository.findAll(specification, pageable);
+
         return auctions.map(ModelMapper::convertAuctionToAuctionPreviewDTO);
     }
 
