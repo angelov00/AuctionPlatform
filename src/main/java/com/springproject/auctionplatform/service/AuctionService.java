@@ -132,7 +132,7 @@ public class AuctionService {
 
 
     @Transactional
-    public void placeBid(Long auctionId, BigDecimal amount, String username) {
+    public Bid placeBid(Long auctionId, BigDecimal amount, String username) {
         Auction auction = getAuctionById(auctionId);
 
         User user = userRepository.findByUsername(username)
@@ -159,6 +159,7 @@ public class AuctionService {
 
         auction.setCurrentPrice(amount);
         auctionRepository.saveAndFlush(auction);
+        return bid;
     }
 
     public Optional<Auction> findById(Long auctionId) {
@@ -271,5 +272,8 @@ public class AuctionService {
         } else throw new IllegalArgumentException("Invalid id");
     }
 
+    public long countActiveAuctions() {
+        return this.auctionRepository.countAllByStatus(AuctionStatus.ONGOING);
+    }
 
 }

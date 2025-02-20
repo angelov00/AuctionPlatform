@@ -10,9 +10,11 @@ import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
 import com.springproject.auctionplatform.service.AuctionService;
 import com.springproject.auctionplatform.service.PromotionService;
+import com.springproject.auctionplatform.util.ModelMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,17 +28,20 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/auction")
+@RequestMapping("/auctions")
 public class AuctionController {
 
     public static final int PROMOTED_PER_PAGE= 3;
     private final AuctionService auctionService;
     private final PromotionService promotionService;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     @Autowired
-    public AuctionController(AuctionService auctionService, PromotionService promotionService) {
+    public AuctionController(AuctionService auctionService, PromotionService promotionService, SimpMessagingTemplate messagingTemplate) {
         this.auctionService = auctionService;
         this.promotionService = promotionService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @GetMapping
@@ -105,6 +110,7 @@ public class AuctionController {
         return "auction-details";
     }
 
+
     @PostMapping("/bid")
     public String placeBid(@RequestParam Long auctionId,
                            @RequestParam BigDecimal amount,
@@ -112,13 +118,17 @@ public class AuctionController {
                            Model model,
                            RedirectAttributes redirectAttributes) {
         try {
-            auctionService.placeBid(auctionId, amount, userDetails.getUsername());
-            return "redirect:/auction/details/" + auctionId;
+            Bid newBid = auctionService.placeBid(auctionId, amount, userDetails.getUsername());
+
+            BidDetailsDTO dto = ModelMapper.convertBidToBidDetailsDTO(newBid);
+            messagingTemplate.convertAndSend("/topic/auction/" + auctionId, dto);
+            return "redirect:/auctions/details/" + auctionId;
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/auction/details/" + auctionId;
+            return "redirect:/auctions/details/" + auctionId;
         }
     }
+
 
     @GetMapping("/my-auctions")
     public String myAuctions(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {

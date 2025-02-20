@@ -9,14 +9,30 @@
 </head>
 <body>
 <!-- Include the menu fragment -->
+<!-- Админ меню (само за администратори) -->
+
 <div th:replace="~{fragments/menu :: menu}"></div>
 
 <div class="container mt-5">
+<!--    TODO Add admin landing-->
     <!-- Authenticated User Greeting -->
     <h1 class="text-center" sec:authorize="isAuthenticated()" th:text="'Welcome home, ' + ${fullName} + '!'"></h1>
-
     <!-- Anonymous User Greeting -->
     <h1 class="text-center text-info" sec:authorize="isAnonymous()">Welcome, Guest!</h1>
+</div>
+
+<div th:if="${isBanned}" style="
+    background-color: #ff0000;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    margin: 20px 0;
+">
+    <span>YOU ARE BANNED!</span>
 </div>
 
 <!-- Bootstrap JS (for any interactive elements like dropdowns) -->

@@ -2,26 +2,54 @@
     <!-- Include Bootstrap CSS for the menu fragment -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-
     <style>
-        /* CSS за градиентен фон */
         .navbar-gradient {
-            background: linear-gradient(to right, #d35400, #f39c12); /* Преход от карамел до кафяво */
+            background: linear-gradient(to right, #d35400, #f39c12);
         }
         .nav-link:hover {
-            background-color: #e67e22; /* Променя фона при hover на бутоните */
-            color: #fff; /* Променя цвета на текста при hover */
+            background-color: #e67e22;
+            color: #fff;
         }
 
     </style>
 
+    <!-- Admin Menu -->
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Превключване на навигацията">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">Табло</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/users}">Управление на потребители</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/stats}">Статистика</a>
+                    </li>
+                    <li class="nav-item">
+                        <form th:action="@{/auth/logout}" method="post">
+                            <button type="submit" class="btn btn-danger nav-link">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </nav>
+    </div>
+
 
     <!-- Authenticated User Menu -->
-    <div sec:authorize="isAuthenticated()">
+    <div sec:authorize="isAuthenticated() && !hasRole('ROLE_ADMIN')">
         <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient">
             <div class="container-fluid">
                 <!-- Navbar Brand -->
-                <a class="navbar-brand" href="#">Auction Platform</a>
+                <a class="navbar-brand" th:href="@{/home}">Auction Platform</a>
 
                 <!-- Toggler for responsive navigation -->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,17 +75,17 @@
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form th:action="@{/auction/create}" method="get">
+                            <form th:action="@{/auctions/create}" method="get">
                                 <button type="submit" class="btn btn-link text-white nav-link">Add Auction</button>
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form th:action="@{/auction}" method="get">
+                            <form th:action="@{/auctions}" method="get">
                                 <button type="submit" class="btn btn-link text-white nav-link">Browse Auctions</button>
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form th:action="@{/auction/my-auctions}" method="get">
+                            <form th:action="@{/auctions/my-auctions}" method="get">
                                 <button type="submit" class="btn btn-link text-white nav-link">My Auctions</button>
                             </form>
                         </li>
@@ -92,7 +120,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark navbar-gradient">
             <div class="container-fluid">
                 <!-- Navbar Brand -->
-                <a class="navbar-brand" href="#">Auction Platform</a>
+                <a class="navbar-brand" th:href="@{/home}">Auction Platform</a>
 
                 <!-- Toggler for responsive navigation -->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAnonymous" aria-controls="navbarNavAnonymous" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +136,7 @@
                             </form>
                         </li>
                         <li class="nav-item">
-                            <form th:action="@{/auction}" method="get">
+                            <form th:action="@{/auctions}" method="get">
                                 <button type="submit" class="btn btn-link text-white nav-link">Browse Auctions</button>
                             </form>
                         </li>

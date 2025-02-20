@@ -21,6 +21,7 @@ public class HomeController {
         if(userDetails != null) {
             String fullName = userDetails.getFirstName() + " " + userDetails.getLastName();
             model.addAttribute("fullName", fullName);
+            model.addAttribute("isBanned", userDetails.isBanned());
         }
 
         return "home";

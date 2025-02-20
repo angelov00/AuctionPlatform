@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<form th:action="@{/admin/users}" th:method="get" class="mb-3 d-flex">
+    <input type="text" name="search" class="form-control me-2" placeholder="Търси по потребителско име..." th:value="${search}">
+    <button type="submit" class="btn btn-primary">Търси</button>
+</form>
+
+<!-- Основно съдържание -->
+<div class="container mt-4">
+    <h1>Управление на потребители</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Потребителско име</th>
+            <th>Имейл</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                <div th:if="${user.isBanned}">
+                    <form th:action="@{/admin/users/{id}/unban(id=${user.id})}" th:method="post" style="display:inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Unban</button>
+                    </form>
+                </div>
+
+                <div th:if="${!user.isBanned}">
+                <form th:action="@{/admin/users/{id}/ban(id=${user.id})}" th:method="post" style="display:inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Ban</button>
+                </form>
+                </div>
+
+                <form th:action="@{/admin/users/{id}/promote-to-admin(id=${user.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-info btn-sm"
+                            onclick="return confirm('Сигурни ли сте, че искате да направите този потребител администратор?')">
+                        Направи админ
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

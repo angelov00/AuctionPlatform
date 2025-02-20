@@ -2,7 +2,6 @@ package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.config.security.CustomUserDetails;
 import com.springproject.auctionplatform.model.DTO.PromotionDTO;
-import com.springproject.auctionplatform.model.entity.Promotion;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.service.PromotionService;
 import com.springproject.auctionplatform.util.PDFGenerator;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/promotions")

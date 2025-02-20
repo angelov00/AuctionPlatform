@@ -1,46 +1,41 @@
 package com.springproject.auctionplatform.controller;
 
+import com.springproject.auctionplatform.exception.BannedException;
 import com.springproject.auctionplatform.exception.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleResourceNotFound(ResourceNotFoundException ex) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("errorCode", HttpStatus.NOT_FOUND.value());
-        modelAndView.addObject("errorMessage", "The requested resource could not be found.");
-        modelAndView.addObject("errorDetails", ex.getMessage());
-
-        return modelAndView;
+        return buildErrorModel(HttpStatus.NOT_FOUND, "The requested resource could not be found.", ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleResourceNotFound(IllegalArgumentException ex) {
-        ModelAndView modelAndView = new ModelAndView("error");
-        modelAndView.addObject("errorCode", HttpStatus.BAD_REQUEST.value());
-        modelAndView.addObject("errorMessage", "The given data is not valid.");
-        modelAndView.addObject("errorDetails", ex.getMessage());
+    public ModelAndView handleIllegalArgumentException(IllegalArgumentException ex) {
+        return buildErrorModel(HttpStatus.BAD_REQUEST, "The given data is not valid.", ex.getMessage());
+    }
 
-        return modelAndView;
+    @ExceptionHandler(BannedException.class)
+    public ModelAndView handleBannedException(BannedException ex) {
+        return buildErrorModel(HttpStatus.FORBIDDEN, "You are banned!.", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleGenericException(Exception ex) {
+        return buildErrorModel(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", "Internal server error!");
+    }
+
+
+    private ModelAndView buildErrorModel(HttpStatus status, String message, String details) {
         ModelAndView modelAndView = new ModelAndView("error");
-
-        modelAndView.addObject("errorCode", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        modelAndView.addObject("errorMessage", "An unexpected error occurred");
-        modelAndView.addObject("errorDetails", ex.getMessage());
-
+        modelAndView.addObject("errorCode", status.value());
+        modelAndView.addObject("errorMessage", message);
+        modelAndView.addObject("errorDetails", details);
         return modelAndView;
     }
 }

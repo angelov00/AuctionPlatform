@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.cloudinary:cloudinary-http5:2.0.0'
     implementation 'com.cloudinary:cloudinary-taglib:2.0.0'
     implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

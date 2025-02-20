@@ -7,6 +7,7 @@ import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import com.springproject.auctionplatform.model.enums.AuctionStatus;
 import com.springproject.auctionplatform.model.enums.PaymentMethod;
+import com.springproject.auctionplatform.model.enums.Role;
 import com.springproject.auctionplatform.repository.AuctionRepository;
 import com.springproject.auctionplatform.repository.BidRepository;
 import com.springproject.auctionplatform.repository.PromotionRepository;
@@ -49,7 +50,7 @@ public class InitDB {
             user.setLastName("Smith");
             user.setEmail("john.smith@gmail.com");
             user.setPhone("0888888888");
-            //user.getPreferredCategories().add(AuctionCategory.ART);
+            user.getRoles().add(Role.ROLE_ADMIN);
             this.userRepository.save(user);
 
             User user2 = new User();
@@ -59,8 +60,108 @@ public class InitDB {
             user2.setLastName("Smith");
             user2.setEmail("jane.smith@gmail.com");
             user2.setPhone("0777777777");
-            //user2.getPreferredCategories().add(AuctionCategory.JEWELRY);
             this.userRepository.save(user2);
+
+            User user3 = new User();
+            user3.setUsername("michael.johnson");
+            user3.setPassword(this.passwordEncoder.encode("12345678"));
+            user3.setFirstName("Michael");
+            user3.setLastName("Johnson");
+            user3.setEmail("michael.johnson@gmail.com");
+            user3.setPhone("0666666666");
+            user3.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user3);
+
+            User user4 = new User();
+            user4.setUsername("emily.davis");
+            user4.setPassword(this.passwordEncoder.encode("12345678"));
+            user4.setFirstName("Emily");
+            user4.setLastName("Davis");
+            user4.setEmail("emily.davis@gmail.com");
+            user4.setPhone("0555555555");
+            user4.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user4);
+
+            User user5 = new User();
+            user5.setUsername("david.wilson");
+            user5.setPassword(this.passwordEncoder.encode("12345678"));
+            user5.setFirstName("David");
+            user5.setLastName("Wilson");
+            user5.setEmail("david.wilson@gmail.com");
+            user5.setPhone("0444444444");
+            user5.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user5);
+
+            User user6 = new User();
+            user6.setUsername("sophia.brown");
+            user6.setPassword(this.passwordEncoder.encode("12345678"));
+            user6.setFirstName("Sophia");
+            user6.setLastName("Brown");
+            user6.setEmail("sophia.brown@gmail.com");
+            user6.setPhone("0333333333");
+            user6.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user6);
+
+            User user7 = new User();
+            user7.setUsername("william.jones");
+            user7.setPassword(this.passwordEncoder.encode("12345678"));
+            user7.setFirstName("William");
+            user7.setLastName("Jones");
+            user7.setEmail("william.jones@gmail.com");
+            user7.setPhone("0222222222");
+            user7.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user7);
+
+            User user8 = new User();
+            user8.setUsername("olivia.miller");
+            user8.setPassword(this.passwordEncoder.encode("12345678"));
+            user8.setFirstName("Olivia");
+            user8.setLastName("Miller");
+            user8.setEmail("olivia.miller@gmail.com");
+            user8.setPhone("0111111111");
+            user8.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user8);
+
+            User user9 = new User();
+            user9.setUsername("james.moore");
+            user9.setPassword(this.passwordEncoder.encode("12345678"));
+            user9.setFirstName("James");
+            user9.setLastName("Moore");
+            user9.setEmail("james.moore@gmail.com");
+            user9.setPhone("0999999999");
+            user9.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user9);
+
+            User user10 = new User();
+            user10.setUsername("charlotte.anderson");
+            user10.setPassword(this.passwordEncoder.encode("12345678"));
+            user10.setFirstName("Charlotte");
+            user10.setLastName("Anderson");
+            user10.setEmail("charlotte.anderson@gmail.com");
+            user10.setPhone("0888888888");
+            user10.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user10);
+
+            User user11 = new User();
+            user11.setUsername("henry.thomas");
+            user11.setPassword(this.passwordEncoder.encode("12345678"));
+            user11.setFirstName("Henry");
+            user11.setLastName("Thomas");
+            user11.setEmail("henry.thomas@gmail.com");
+            user11.setPhone("0777777777");
+            user11.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user11);
+
+            User user12 = new User();
+            user12.setUsername("amelia.white");
+            user12.setPassword(this.passwordEncoder.encode("12345678"));
+            user12.setFirstName("Amelia");
+            user12.setLastName("White");
+            user12.setEmail("amelia.white@gmail.com");
+            user12.setPhone("0666666666");
+            user12.getRoles().add(Role.ROLE_USER);
+            this.userRepository.save(user12);
+
 
             Auction auction = new Auction();
             auction.setTitle("An old watch");

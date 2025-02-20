@@ -1,7 +1,6 @@
 package com.springproject.auctionplatform.controller;
 
 import com.springproject.auctionplatform.config.security.CustomUserDetails;
-import com.springproject.auctionplatform.model.DTO.BidDetailsDTO;
 import com.springproject.auctionplatform.model.entity.Bid;
 import com.springproject.auctionplatform.model.entity.User;
 import com.springproject.auctionplatform.service.BidService;

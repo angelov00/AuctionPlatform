@@ -22,4 +22,8 @@ public class BidService {
     public List<Bid> findBidsByUser(User user) {
         return this.bidRepository.findByUserId(user.getId());
     }
+
+    public long getTotalBidsCount() {
+        return this.bidRepository.count();
+    }
 }

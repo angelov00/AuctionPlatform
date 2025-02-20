@@ -26,6 +26,12 @@
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
+<div th:if="${param.error}" class="alert alert-danger">
+    <p th:if="${param.error == 'banned'}">Вашият акаунт е блокиран. Моля, свържете се с администратора.</p>
+<!--    <p th:if="${param.error == 'banned'}">Невалидно потребителско име или парола.</p>-->
+</div>
+
+
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4 w-100" style="max-width: 400px;">
         <h2 class="text-center mb-4">Login</h2>

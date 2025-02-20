@@ -46,4 +46,8 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public User getUser() { return this.user; }
+
+    public boolean isBanned() {
+        return user.isBanned();
+    }
 }

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.util.*;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -48,6 +47,9 @@ public class User {
 //    @ElementCollection(targetClass = AuctionCategory.class, fetch = FetchType.LAZY)
 //    private Set<AuctionCategory> preferredCategories = EnumSet.noneOf(AuctionCategory.class);
 
+    @Column(nullable = false)
+    private boolean isBanned;
+
     @ManyToMany
     @JoinTable(
             name = "conversation_participants",
@@ -58,6 +60,10 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Auction> watchlist = new HashSet<>();
+
+    public User() {
+        this.isBanned = false;
+    }
 
     public User(String username, String password, String firstName, String lastName,
                 String email, String phone, Set<Role> roles) {

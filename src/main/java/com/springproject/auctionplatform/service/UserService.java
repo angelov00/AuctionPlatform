@@ -11,6 +11,8 @@ import com.springproject.auctionplatform.repository.AuctionRepository;
 import com.springproject.auctionplatform.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,14 @@ public class UserService{
         this.userRepository = userRepository;
         this.auctionRepository = auctionRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public Page<User> findAllByUsername(String username, Pageable pageable) {
+        return this.userRepository.findByUsernameContainingIgnoreCase(username, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -105,5 +115,35 @@ public class UserService{
         //currentUser.setAvatarURL(updatedUser.getAvatarURL());
 
         return userRepository.save(currentUser); // Записваме промените в базата данни
+    }
+
+    public void promoteToAdmin(Long userId) {
+        User user = getUserById(userId);
+        user.getRoles().add(Role.ROLE_ADMIN);
+        this.userRepository.save(user);
+    }
+
+    public void banUser(Long userId) {
+        User user = getUserById(userId);
+        user.setBanned(true);
+        this.userRepository.save(user);
+    }
+
+    public void unbanUser(Long userId) {
+        User user = getUserById(userId);
+        user.setBanned(false);
+        this.userRepository.save(user);
+    }
+
+    public long countUsers() {
+        return this.userRepository.count();
+    }
+
+    public long countBannedUser() {
+        return this.userRepository.countBannedUsers();
+    }
+
+    public List<User> findAllList() {
+        return this.userRepository.findAll();
     }
 }
