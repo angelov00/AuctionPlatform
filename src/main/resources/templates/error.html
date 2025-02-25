@@ -2,78 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Error Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-        }
-        .error-header {
-            background-color: #cc4a02;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            border-radius: 5px 5px 0 0;
-        }
-        .error-container {
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .error-details p {
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 3px;
-            font-size: 16px;
-        }
-        .home-link {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background-color: #cc4a02;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 5px;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        .home-link:hover {
-            background-color: #a53a00;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
+        html, body {
+            height: 100%;
+            margin: 0;
         }
     </style>
 </head>
+
 <body>
-<div class="error-header">
-    Error Occurred
+
+<div th:replace="~{fragments/menu :: menu}" class="w-100"></div>
+
+<div class="alert alert-danger text-center w-100">
+    <h1>Error Occurred!</h1>
 </div>
-<div class="error-container">
-    <div class="error-details">
-        <h2>Error Details</h2>
-        <p><strong>Error Code:</strong> <span th:text="${errorCode}">500</span></p>
-        <p><strong>Message:</strong> <span th:text="${errorMessage}">Unexpected Error</span></p>
-        <p><strong>Details:</strong> <span th:text="${errorDetails}">Error Description</span></p>
-    </div>
-    <div class="button-container">
-        <a th:href="@{/home}" class="home-link">Return to Home</a>
+
+<div class="border rounded p-4 bg-light w-75 mx-auto">
+    <h2>Error Details</h2>
+    <p><strong>Error Code:</strong> <span th:text="${errorCode}">500</span></p>
+    <p><strong>Message:</strong> <span th:text="${errorMessage}">Unexpected Error</span></p>
+    <p><strong>Details:</strong> <span th:text="${errorDetails}">Error Description</span></p>
+    <div class="text-center mt-4">
+        <a th:href="@{/home}" class="btn btn-primary">Return to Home</a>
     </div>
 </div>
+
 
 </body>
 </html>
-

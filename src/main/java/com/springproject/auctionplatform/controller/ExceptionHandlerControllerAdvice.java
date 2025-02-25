@@ -30,7 +30,6 @@ public class ExceptionHandlerControllerAdvice {
         return buildErrorModel(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", "Internal server error!");
     }
 
-
     private ModelAndView buildErrorModel(HttpStatus status, String message, String details) {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("errorCode", status.value());
