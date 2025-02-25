@@ -71,7 +71,7 @@ public class AuctionService {
         Auction auction = new Auction();
         auction.setTitle(auctionAddDTO.getTitle());
         auction.setStartTime(LocalDateTime.now());
-        auction.setEndTime(LocalDateTime.now().plusDays(auctionAddDTO.getDurationDays()));
+        auction.setEndTime(auctionAddDTO.getEndTime());
         auction.setDescription(auctionAddDTO.getDescription());
         auction.setCategory(auctionAddDTO.getCategory());
         auction.setStartingPrice(auctionAddDTO.getStartingPrice());

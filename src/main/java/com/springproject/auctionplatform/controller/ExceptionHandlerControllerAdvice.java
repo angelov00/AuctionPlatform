@@ -27,6 +27,7 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleGenericException(Exception ex) {
+        System.out.println(ex.getMessage());
         return buildErrorModel(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", "Internal server error!");
     }
 

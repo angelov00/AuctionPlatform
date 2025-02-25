@@ -1,11 +1,13 @@
 package com.springproject.auctionplatform.model.DTO;
 
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
+import com.springproject.auctionplatform.validation.EndTimeConstraint;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,9 +18,10 @@ public class AuctionAddDTO {
     @Size(min = 5, max = 100)
     private String title;
 
-    @Min(value = 1)
-    @Max(value = 30)
-    private Integer durationDays;
+    @NotNull(message = "Please provide end time of the auction")
+    @Future(message = "Please provide future date")
+    @EndTimeConstraint(message = "The auction should be end in no more than 30 days.")
+    private LocalDateTime endTime;
 
     @NotBlank(message = "Enter a description!")
     @Size(min = 10, max = 1000)
