@@ -2,24 +2,25 @@ package com.springproject.auctionplatform.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import org.springframework.beans.factory.annotation.Value;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class CloudinaryConfig {
 
-    @Value("${cloudinary.cloud_name}")
-    private String cloudName;
+    private final Dotenv dotenv;
 
-    @Value("${cloudinary.api_key}")
-    private String apiKey;
-
-    @Value("${cloudinary.api_secret}")
-    private String apiSecret;
+    public CloudinaryConfig() {
+        dotenv = Dotenv.load();
+    }
 
     @Bean
     public Cloudinary cloudinary() {
+        String cloudName = dotenv.get("CLOUDINARY_CLOUD_NAME");
+        String apiKey = dotenv.get("CLOUDINARY_API_KEY");
+        String apiSecret = dotenv.get("CLOUDINARY_API_SECRET");
+
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,
