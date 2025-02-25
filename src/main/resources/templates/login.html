@@ -6,19 +6,16 @@
     <title>Login Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <!-- Персонализиран стил за бутоните -->
     <style>
-        /* Променяме основния стил за всички бутони */
         .btn {
-            background-color: #d35400 !important; /* Оранжев цвят за фона */
-            border-color: #d35400 !important; /* Оранжев цвят за границата */
-            color: #fff !important; /* Бял текст */
+            background-color: #d35400 !important;
+            border-color: #d35400 !important;
+            color: #fff !important;
         }
 
-        /* Променяме стила за бутоните при hover */
         .btn:hover {
-            background-color: #e67e22 !important; /* Малко по-светъл оранжев при hover */
-            border-color: #e67e22 !important; /* Променяме границата при hover */
+            background-color: #e67e22 !important;
+            border-color: #e67e22 !important;
         }
     </style>
 </head>
@@ -26,36 +23,27 @@
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
-<div th:if="${param.error}" class="alert alert-danger">
-    <p th:if="${param.error == 'banned'}">Вашият акаунт е блокиран. Моля, свържете се с администратора.</p>
-<!--    <p th:if="${param.error == 'banned'}">Невалидно потребителско име или парола.</p>-->
-</div>
-
-
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4 w-100" style="max-width: 400px;">
         <h2 class="text-center mb-4">Login</h2>
         <form th:action="@{/auth/login}" method="post">
-            <!-- Username Field -->
+
             <div class="form-group">
                 <label for="username">Username</label>
                 <input id="username" name="username" type="text" class="form-control"
                        placeholder="Enter your username" required>
             </div>
 
-            <!-- Password Field -->
             <div class="form-group">
                 <label for="password">Password</label>
                 <input id="password" name="password" type="password" class="form-control"
                        placeholder="Enter your password" required>
             </div>
 
-            <!-- Error Message -->
             <div th:if="${param.error}" class="alert alert-danger text-center">
                 Invalid username or password.
             </div>
 
-            <!-- Submit Button -->
             <button type="submit" class="btn btn-block">Login</button>
         </form>
     </div>

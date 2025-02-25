@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Page</title>
-    <!-- Bootstrap 4.3.1 CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<!-- Include the menu fragment -->
-<!-- Админ меню (само за администратори) -->
 
 <div th:replace="~{fragments/menu :: menu}"></div>
 
 <div class="container mt-5">
-<!--    TODO Add admin landing-->
     <!-- Authenticated User Greeting -->
     <h1 class="text-center" sec:authorize="isAuthenticated()" th:text="'Welcome home, ' + ${fullName} + '!'"></h1>
     <!-- Anonymous User Greeting -->
@@ -35,7 +31,6 @@
     <span>YOU ARE BANNED!</span>
 </div>
 
-<!-- Bootstrap JS (for any interactive elements like dropdowns) -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

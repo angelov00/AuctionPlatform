@@ -5,19 +5,16 @@
     <title>Browse Auctions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <!-- Персонализиран стил за бутоните -->
     <style>
-        /* Променяме основния стил за всички бутони */
         .btn {
-            background-color: #d35400 !important; /* Задаваме оранжевия цвят за фона */
-            border-color: #d35400 !important; /* Задаваме оранжевия цвят за границата */
-            color: #fff !important; /* Задаваме бял текст */
+            background-color: #d35400 !important;
+            border-color: #d35400 !important;
+            color: #fff !important;
         }
 
-        /* Променяме стила за бутоните при hover */
         .btn:hover {
-            background-color: #e67e22 !important; /* Променяме цвета при hover */
-            border-color: #e67e22 !important; /* Променяме границата при hover */
+            background-color: #e67e22 !important;
+            border-color: #e67e22 !important;
         }
 
         .btn-clear {
@@ -38,8 +35,7 @@
 <div class="container mt-5">
     <h2>Browse Auctions</h2>
 
-    <!-- Auction Filter Form -->
-    <form th:action="@{/auction}" method="get" th:object="${auctionFilterDTO}">
+    <form th:action="@{/auctions}" method="get" th:object="${auctionFilterDTO}">
         <div class="row">
             <div class="col-md-3">
                 <label for="auctionCategory">Category</label>
@@ -68,7 +64,6 @@
 
         <div class="mt-3">
             <button type="submit" class="btn">Filter</button>
-            <!-- Добавен бутон за изчистване на филтъра -->
             <a href="/auction" class="btn btn-clear">Clear Filter</a>
         </div>
     </form>
@@ -98,7 +93,6 @@
 
     <h3 class="mt-5">Regular Auctions</h3>
 
-    <!-- Проверка за налични редовни търгове -->
     <div th:if="${regularAuctions != null and regularAuctions.content.size() > 0}">
         <div class="row">
             <div class="col-md-4" th:each="auction : ${regularAuctions.content}">
@@ -125,7 +119,6 @@
             </div>
         </div>
 
-        <!-- Пагинация за редовни търгове -->
         <div class="d-flex justify-content-center mt-4">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
@@ -147,27 +140,22 @@
         </div>
     </div>
 
-    <!-- Ако няма редовни търгове -->
     <div th:if="${regularAuctions == null or regularAuctions.content.size() == 0}" class="alert alert-info">
         No regular auctions available at the moment.
     </div>
 
 </div>
 
-<!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Select all the auctions on the page
         const auctionCards = document.querySelectorAll('.card');
 
         auctionCards.forEach(function(card) {
             const endTimeText = card.querySelector('.end-time').textContent.trim();
             const remainingTimeSpan = card.querySelector('.remaining-time');
 
-            // Convert the end time to a JavaScript Date object
             const endTime = new Date(endTimeText);
 
-            // Function to update the remaining time
             function updateRemainingTime() {
                 const now = new Date();
                 const timeDiff = endTime - now;
@@ -184,10 +172,8 @@
                 remainingTimeSpan.textContent = `${hours}h ${minutes}m ${seconds}s`;
             }
 
-            // Update the time initially
             updateRemainingTime();
 
-            // Update the time every second
             setInterval(updateRemainingTime, 1000);
         });
     });

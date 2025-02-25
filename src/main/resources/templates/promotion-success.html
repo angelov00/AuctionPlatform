@@ -44,11 +44,8 @@
     </div>
 
     <div class="btn-container">
-        <!-- Button to go back to the auction details page -->
-        <a th:href="@{/auction/details/{id}(id=${promotion.auction.id})}" class="btn btn-primary">View Auction</a>
-
-        <!-- Option to create a new auction -->
-        <a th:href="@{/auction/create}" class="btn btn-secondary">Create New Auction</a>
+        <a th:href="@{/auctions/details/{id}(id=${promotion.auction.id})}" class="btn btn-primary">View Auction</a>
+        <a th:href="@{/auctions/create}" class="btn btn-secondary">Create New Auction</a>
     </div>
 </div>
 

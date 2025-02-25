@@ -31,7 +31,6 @@
 <div class="container mt-5">
     <h1 class="mb-4">My Auctions</h1>
 
-    <!-- Ongoing Auctions -->
     <h2>Ongoing Auctions</h2>
     <table class="table table-striped table-bordered auction-table">
         <thead class="thead-dark">
@@ -50,14 +49,13 @@
             <td><span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span></td>
             <td><span class="remaining-time"></span></td>
             <td>
-                <a th:href="@{/auction/details/{auctionId}(auctionId=${auction.id})}"
+                <a th:href="@{/auctions/details/{auctionId}(auctionId=${auction.id})}"
                    class="btn btn-info btn-sm btn-details">View Details</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <!-- To Be Finalized Auctions -->
     <h2>Auctions Waiting for Finalization</h2>
     <table class="table table-striped table-bordered auction-table">
         <thead class="thead-dark">
@@ -74,7 +72,7 @@
             <td th:text="${auction.currentPrice ?: 'No Bids'}"></td>
             <td th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm')}"></td>
             <td class="td-details">
-                <a th:href="@{/auction/details/{auctionId}(auctionId=${auction.id})}"
+                <a th:href="@{/auctions/details/{auctionId}(auctionId=${auction.id})}"
                    class="btn btn-info btn-sm btn-details">View Details</a>
                 <a th:href="@{/conversations}" class="btn btn-primary btn-sm">Contact Buyer</a>
             </td>
@@ -82,7 +80,6 @@
         </tbody>
     </table>
 
-    <!-- Completed Auctions -->
     <h2>Completed Auctions</h2>
     <table class="table table-striped table-bordered auction-table">
         <thead class="thead-dark">
@@ -99,7 +96,7 @@
             <td th:text="${auction.currentPrice}"></td>
             <td th:text="${#temporals.format(auction.completionTime, 'dd MMM yyyy HH:mm')}"></td>
             <td>
-                <a th:href="@{/auction/details/{auctionId}(auctionId=${auction.id})}"
+                <a th:href="@{/auctions/details/{auctionId}(auctionId=${auction.id})}"
                    class="btn btn-info btn-sm btn-details">View Details</a>
             </td>
         </tr>
@@ -109,24 +106,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Получаваме всички елементи за "end-time" и "remaining-time"
         const endTimeElements = document.querySelectorAll('.end-time');
         const remainingTimeElements = document.querySelectorAll('.remaining-time');
 
-        // Проверка дали имаме съответстващи елементи
         if (endTimeElements.length === 0 || remainingTimeElements.length === 0) {
             console.warn("End time or remaining time element is missing.");
             return;
         }
 
-        // Функция за актуализиране на оставащото време за всеки търг
         function updateRemainingTime() {
-            // За всеки търг
             endTimeElements.forEach((endTimeElement, index) => {
                 const remainingTimeElement = remainingTimeElements[index];
                 const endTimeText = endTimeElement.textContent.trim();
 
-                // Преобразуваме времето на края в JavaScript Date обект
                 const endTime = new Date(endTimeText);
 
                 const now = new Date();
@@ -144,16 +136,11 @@
             });
         }
 
-        // Актуализиране на времето при зареждане
         updateRemainingTime();
 
-        // Актуализиране на времето всяка секунда
         setInterval(updateRemainingTime, 1000);
     });
 
-
 </script>
-
-
 </body>
 </html>

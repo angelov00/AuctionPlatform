@@ -2,14 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User Profile</title>
-    <!-- Import Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
 <style>
     .bg-custom {
-        background-color: #d35400 !important; /* Оранжевият цвят */
+        background-color: #d35400 !important;
     }
 </style>
 
@@ -19,11 +18,9 @@
     <p th:text="${message}"></p>
 </div>
 
-<!-- Main container for the profile -->
 <div class="container mt-5">
     <h1 class="text-center mb-4" th:text="'Profile of ' + ${user.firstName} + ' ' + ${user.lastName}"></h1>
 
-    <!-- Profile details in a card -->
     <div class="card">
         <div class="card-header bg-custom text-white">
             <h4 class="card-title mb-0">User Profile</h4>
@@ -41,7 +38,6 @@
                 </div>
             </div>
 
-            <!-- Button for editing profile -->
             <div class="mt-4 text-center">
                 <a th:href="@{/users/edit}" class="btn btn-lg text-white bg-custom">Edit Profile</a>
             </div>
@@ -50,7 +46,6 @@
     </div>
 </div>
 
-<!-- Import Bootstrap JS (needed for responsive behavior and components like dropdowns) -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

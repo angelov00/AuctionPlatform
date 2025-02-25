@@ -12,7 +12,6 @@
 <div class="container mt-5">
     <h2>Your Watchlist</h2>
 
-    <!-- Flash message -->
     <div th:if="${message}" class="alert alert-success">
         <p th:text="${message}"></p>
     </div>
@@ -35,12 +34,11 @@
             <tbody>
             <tr th:each="auction : ${watchlist}">
                 <td>
-                    <a th:href="@{/auction/details/{id}(id=${auction.id})}" th:text="${auction.title}"></a>
+                    <a th:href="@{/auctions/details/{id}(id=${auction.id})}" th:text="${auction.title}"></a>
                 </td>
                 <td th:text="${auction.startingPrice}"></td>
                 <td class="end-time"> <span class="end-time" th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm:ss')}"></span></td>
                 <td>
-                    <!-- Поле за оставащо време -->
                     <span class="remaining-time">Calculating...</span>
                 </td>
                 <td>
@@ -56,7 +54,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Избира всички редове с търгове
         const rows = document.querySelectorAll('tr');
 
         rows.forEach(function(row) {
@@ -67,10 +64,8 @@
                 return;
             }
 
-            // Взима крайното време от текста
             const endTime = new Date(endTimeElement.textContent.trim());
 
-            // Функция за обновяване на оставащото време
             function updateRemainingTime() {
                 const now = new Date();
                 const timeDiff = endTime - now;
@@ -87,10 +82,8 @@
                 remainingTimeElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
             }
 
-            // Първоначално обновяване
             updateRemainingTime();
 
-            // Обновяване на всяка секунда
             setInterval(updateRemainingTime, 1000);
         });
     });

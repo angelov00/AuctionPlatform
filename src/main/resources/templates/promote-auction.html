@@ -12,7 +12,6 @@
 <div class="container mt-5">
     <h2>Promote Auction</h2>
 
-    <!-- Display Auction Details -->
     <div>
         <h3>Title: <span th:text="${auction.title}"></span></h3>
         <p>Description: <span th:text="${auction.description}"></span></p>
@@ -20,29 +19,24 @@
         <p>End Time: <span th:text="${#temporals.format(auction.endTime, 'dd MMM yyyy HH:mm')}"></span></p>
     </div>
 
-    <!-- Promotion Price -->
     <h4>Promotion Price: <span th:text="${promotionPrice}"></span></h4>
 
-    <form th:action="@{/auction/promote/{id}(id=${auction.id})}" method="post">
-        <!-- Duration (Days) -->
+    <form th:action="@{/auctions/promote/{id}(id=${auction.id})}" method="post">
         <div class="form-group">
             <label for="promotionDuration">Promotion Duration (in days)</label>
             <input type="number" id="promotionDuration" name="promotionDuration" class="form-control" required min="1" max="30">
         </div>
 
-        <!-- Select Payment Method -->
         <div class="form-group">
             <label for="paymentMethod">Select Payment Method</label>
             <select class="form-control" id="paymentMethod" name="paymentMethod" required>
                 <option value="" disabled selected>Select a payment method</option>
-                <!-- Loop through PaymentMethod enum values -->
                 <option th:each="paymentMethod : ${T(com.springproject.auctionplatform.model.enums.PaymentMethod).values()}"
                         th:value="${paymentMethod}"
                         th:text="${paymentMethod.getDescription()}"></option>
             </select>
         </div>
 
-        <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Make Payment (You will be redirected to the payment provider)</button>
     </form>
 </div>
