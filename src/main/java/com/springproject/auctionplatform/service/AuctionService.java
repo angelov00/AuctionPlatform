@@ -47,8 +47,6 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
     private final CloudinaryService cloudinaryService;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private final Logger logger = LoggerFactory.getLogger(AuctionService.class);
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
     private final PromotionRepository promotionRepository;

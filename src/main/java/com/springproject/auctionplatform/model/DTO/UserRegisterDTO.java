@@ -2,6 +2,7 @@ package com.springproject.auctionplatform.model.DTO;
 
 import com.springproject.auctionplatform.model.enums.AuctionCategory;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class UserRegisterDTO {
 

@@ -36,14 +36,6 @@ public class UserService{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
-
-    public Page<User> findAllByUsername(String username, Pageable pageable) {
-        return this.userRepository.findByUsernameContainingIgnoreCase(username, pageable);
-    }
-
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
@@ -65,14 +57,6 @@ public class UserService{
             registerDTO.getLastName(), registerDTO.getEmail(), registerDTO.getPhone(), Set.of(Role.ROLE_USER));
 
         userRepository.save(user);
-    }
-
-    public User deleteUser(long id) {
-        User existing = getUserById(id);
-
-        userRepository.deleteById(id);
-
-        return existing;
     }
 
     public void addToWatchlist(User user, Long auctionId) {
